@@ -1,0 +1,16 @@
+{
+  "name": "Jan",
+  "short_name": "Jan",
+  "description": "Notes on AI, physics, and other things.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f2efe7",
+  "theme_color": "#3159e8",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    }
+  ]
+}

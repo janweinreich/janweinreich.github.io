@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://janweinreich.github.io/sitemap.xml
