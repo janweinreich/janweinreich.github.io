@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageFrame } from "@/app/components/page-frame";
 import { getPost, publishedPosts } from "@/content/posts";
@@ -55,10 +54,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   return (
     <PageFrame>
       <article className="article-shell">
-        <Link className="article-back" href="/writing">
+        <a className="article-back" href="/writing">
           <span aria-hidden="true">←</span>
           Writing
-        </Link>
+        </a>
 
         <header className="article-header">
           <h1>{post.metadata.title}</h1>

@@ -35,6 +35,10 @@ const eslintConfig = defineConfig([
         version: "detect",
       },
     },
+    rules: {
+      // GitHub Pages serves HTML files, not the RSC requests used by Next links.
+      "@next/next/no-html-link-for-pages": "off",
+    },
   },
 ]);
 

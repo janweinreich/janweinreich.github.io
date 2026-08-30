@@ -85,3 +85,22 @@ test("removes disposable starter code", async () => {
   assert.doesNotMatch(packageJson, /react-loading-skeleton|drizzle/);
   await assert.rejects(access(new URL("../app/_sites-preview", templateRoot)));
 });
+
+test("uses document navigation compatible with static hosting", async () => {
+  const routeFiles = [
+    "app/page.tsx",
+    "app/not-found.tsx",
+    "app/components/post-list.tsx",
+    "app/components/site-footer.tsx",
+    "app/components/site-header.tsx",
+    "app/writing/[slug]/page.tsx",
+  ];
+
+  const sources = await Promise.all(
+    routeFiles.map((path) => readFile(new URL(`../${path}`, import.meta.url), "utf8")),
+  );
+
+  for (const source of sources) {
+    assert.doesNotMatch(source, /next\/link/);
+  }
+});

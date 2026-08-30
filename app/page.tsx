@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { PageFrame } from "./components/page-frame";
 import { PostList } from "./components/post-list";
 import { SITE_DESCRIPTION, TOPICS } from "@/content/site-config";
@@ -43,9 +42,9 @@ export default function Home() {
             01
           </span>
           <h2 id="writing-title">Writing</h2>
-          <Link className="section-link" href="/writing" aria-label="Writing">
+          <a className="section-link" href="/writing" aria-label="Writing">
             <span aria-hidden="true">→</span>
-          </Link>
+          </a>
         </div>
         <PostList posts={publishedPosts.slice(0, 4)} />
       </section>

@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 const navigation = [
   { label: "Writing", href: "/writing" },
   { label: "About", href: "/about" },
@@ -16,10 +14,10 @@ export function SiteHeader() {
       <a className="skip-link" href="#main-content">
         Skip to content
       </a>
-      <Link className="wordmark" href="/" aria-label="Jan, home">
+      <a className="wordmark" href="/" aria-label="Jan, home">
         <span>Jan</span>
         <span className="wordmark-dot" aria-hidden="true" />
-      </Link>
+      </a>
 
       <nav className="site-nav" aria-label="Primary navigation">
         <ul>
@@ -33,7 +31,7 @@ export function SiteHeader() {
                   </span>
                 </a>
               ) : (
-                <Link href={item.href}>{item.label}</Link>
+                <a href={item.href}>{item.label}</a>
               )}
             </li>
           ))}

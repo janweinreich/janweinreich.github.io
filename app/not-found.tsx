@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { PageFrame } from "./components/page-frame";
 
 export default function NotFound() {
@@ -6,7 +5,7 @@ export default function NotFound() {
     <PageFrame>
       <section className="not-found">
         <h1>Not found</h1>
-        <Link href="/">Home</Link>
+        <a href="/">Home</a>
       </section>
     </PageFrame>
   );

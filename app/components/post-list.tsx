@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { PostRecord } from "@/content/posts";
 
 function formatDate(value: string) {
@@ -29,7 +28,7 @@ export function PostList({ posts }: { posts: PostRecord[] }) {
           <span className="empty-index" aria-hidden="true">
             {String(index + 1).padStart(2, "0")}
           </span>
-          <Link href={`/writing/${post.slug}`}>
+          <a href={`/writing/${post.slug}`}>
             <div>
               <h3 className="post-title">{post.metadata.title}</h3>
               <p className="post-summary">{post.metadata.summary}</p>
@@ -37,7 +36,7 @@ export function PostList({ posts }: { posts: PostRecord[] }) {
             <time className="post-date" dateTime={post.metadata.published}>
               {formatDate(post.metadata.published)}
             </time>
-          </Link>
+          </a>
         </li>
       ))}
     </ol>
