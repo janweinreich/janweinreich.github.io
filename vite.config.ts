@@ -57,29 +57,33 @@ export default defineConfig(async () => {
       ? { watch: { useFsEvents: false, usePolling: true } }
       : undefined,
     plugins: [
-      mdx({
-        remarkPlugins: [
-          remarkFrontmatter,
-          [remarkMdxFrontmatter, { name: "metadata" }],
-          remarkGfm,
-          remarkMath,
-        ],
-        rehypePlugins: [
-          rehypeSlug,
-          [rehypeAutolinkHeadings, { behavior: "wrap" }],
-          rehypeKatex,
-          [
-            rehypePrettyCode,
-            {
-              keepBackground: false,
-              theme: {
-                dark: "github-dark",
-                light: "github-light",
-              },
-            },
+      {
+        ...mdx({
+          remarkPlugins: [
+            remarkFrontmatter,
+            [remarkMdxFrontmatter, { name: "metadata" }],
+            remarkGfm,
+            remarkMath,
           ],
-        ],
-      }),
+          rehypePlugins: [
+            rehypeSlug,
+            [rehypeAutolinkHeadings, { behavior: "wrap" }],
+            rehypeKatex,
+            [
+              rehypePrettyCode,
+              {
+                keepBackground: false,
+                theme: {
+                  dark: "github-dark",
+                  light: "github-light",
+                },
+              },
+            ],
+          ],
+        }),
+        // RSC analyzes modules early in development, so MDX must compile first.
+        enforce: "pre" as const,
+      },
       vinext(),
       sites(),
       cloudflare({

@@ -7,7 +7,7 @@ Article files live here as `descriptive-slug.mdx`. Nothing is published while
 ---
 title: Approved article title
 summary: Approved article summary
-published: YYYY-MM-DD
+published: "YYYY-MM-DD"
 tags:
   - AI
 draft: true

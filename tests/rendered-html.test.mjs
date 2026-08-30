@@ -38,19 +38,22 @@ test("renders the approved identity and navigation", async () => {
   assert.match(html, /href="\/writing"/);
   assert.match(html, /href="\/about"/);
   assert.match(html, /href="https:\/\/github\.com\/janweinreich"/);
-  assert.match(html, /No posts yet\./);
+  assert.match(html, /One Structure, Three Languages/);
   assert.doesNotMatch(html, /Your site is taking shape|Starter Project/);
 });
 
-test("renders the empty writing and about pages", async () => {
-  const [writingResponse, aboutResponse] = await Promise.all([
+test("renders the first article, writing index, and empty about page", async () => {
+  const [writingResponse, articleResponse, aboutResponse] = await Promise.all([
     render("/writing"),
+    render("/writing/one-structure-three-languages"),
     render("/about"),
   ]);
 
   assert.equal(writingResponse.status, 200);
+  assert.equal(articleResponse.status, 200);
   assert.equal(aboutResponse.status, 200);
-  assert.match(await writingResponse.text(), /No posts yet\./);
+  assert.match(await writingResponse.text(), /One Structure, Three Languages/);
+  assert.match(await articleResponse.text(), /The Hamiltonian generates motion/);
   assert.match(await aboutResponse.text(), /<h1[^>]*>\s*About\s*<\/h1>/i);
 });
 
@@ -65,6 +68,10 @@ test("builds static discovery files", async () => {
   ]);
 
   assert.match(sitemap, /https:\/\/janweinreich\.github\.io\/writing/);
+  assert.match(
+    sitemap,
+    /https:\/\/janweinreich\.github\.io\/writing\/one-structure-three-languages/,
+  );
   assert.match(robots, /Sitemap: https:\/\/janweinreich\.github\.io\/sitemap\.xml/);
   assert.equal(JSON.parse(manifest).name, "Jan");
 });
