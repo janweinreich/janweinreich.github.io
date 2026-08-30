@@ -43,17 +43,29 @@ test("renders the approved identity and navigation", async () => {
 });
 
 test("renders the first article, writing index, and empty about page", async () => {
-  const [writingResponse, articleResponse, aboutResponse] = await Promise.all([
+  const [
+    writingResponse,
+    articleResponse,
+    valuesResponse,
+    fragmentsResponse,
+    aboutResponse,
+  ] = await Promise.all([
     render("/writing"),
     render("/writing/one-structure-three-languages"),
+    render("/writing/values-as-social-dna"),
+    render("/writing/believing-longing-choosing"),
     render("/about"),
   ]);
 
   assert.equal(writingResponse.status, 200);
   assert.equal(articleResponse.status, 200);
+  assert.equal(valuesResponse.status, 200);
+  assert.equal(fragmentsResponse.status, 200);
   assert.equal(aboutResponse.status, 200);
   assert.match(await writingResponse.text(), /One Structure, Three Languages/);
   assert.match(await articleResponse.text(), /The Hamiltonian generates motion/);
+  assert.match(await valuesResponse.text(), /I am not a philosopher/);
+  assert.match(await fragmentsResponse.text(), /Believing in the value/);
   assert.match(await aboutResponse.text(), /<h1[^>]*>\s*About\s*<\/h1>/i);
 });
 
@@ -71,6 +83,14 @@ test("builds static discovery files", async () => {
   assert.match(
     sitemap,
     /https:\/\/janweinreich\.github\.io\/writing\/one-structure-three-languages/,
+  );
+  assert.match(
+    sitemap,
+    /https:\/\/janweinreich\.github\.io\/writing\/values-as-social-dna/,
+  );
+  assert.match(
+    sitemap,
+    /https:\/\/janweinreich\.github\.io\/writing\/believing-longing-choosing/,
   );
   assert.match(robots, /Sitemap: https:\/\/janweinreich\.github\.io\/sitemap\.xml/);
   assert.equal(JSON.parse(manifest).name, "Jan");

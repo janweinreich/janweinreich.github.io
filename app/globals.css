@@ -478,6 +478,60 @@ a:focus-visible {
   color: var(--muted);
 }
 
+.article-body .idea-diagram {
+  width: min(100vw - 3rem, 62rem);
+  max-width: none;
+  padding: clamp(1.4rem, 3vw, 2.25rem);
+  margin: 3rem 50%;
+  border-block: 1px solid var(--line-strong);
+  font-family: var(--font-sans);
+  transform: translateX(-50%);
+}
+
+.idea-diagram-track {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) auto minmax(7rem, 1fr) auto minmax(7rem, 1fr) auto minmax(7rem, 1fr);
+  gap: clamp(0.55rem, 1.5vw, 1.25rem);
+  align-items: center;
+}
+
+.idea-diagram-track span {
+  display: grid;
+  min-height: 5.5rem;
+  place-items: center;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  background: var(--paper-raised);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  line-height: 1.45;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.idea-diagram-track b {
+  color: var(--accent);
+  font-family: var(--font-sans);
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+
+.article-body .idea-diagram figcaption {
+  margin-top: 1.25rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.025em;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.article-body .idea-diagram-compact .idea-diagram-track {
+  grid-template-columns: minmax(8rem, 1fr) auto minmax(8rem, 1fr) auto minmax(12rem, 1.5fr);
+}
+
 .article-body :not(pre) > code {
   padding: 0.14em 0.35em;
   border: 1px solid var(--line);
@@ -714,6 +768,24 @@ a:focus-visible {
 
   .post-date {
     white-space: normal;
+  }
+
+  .article-body .idea-diagram {
+    padding-inline: 1rem;
+  }
+
+  .idea-diagram-track,
+  .article-body .idea-diagram-compact .idea-diagram-track {
+    grid-template-columns: 1fr;
+  }
+
+  .idea-diagram-track span {
+    min-height: auto;
+  }
+
+  .idea-diagram-track b {
+    justify-self: center;
+    transform: rotate(90deg);
   }
 }
 
