@@ -14,8 +14,8 @@ export function SiteHeader() {
       <a className="skip-link" href="#main-content">
         Skip to content
       </a>
-      <a className="wordmark" href="/" aria-label="Jan, home">
-        <span>Jan</span>
+      <a className="wordmark" href="/" aria-label="Jans Blog, home">
+        <span>Jans Blog</span>
         <span className="wordmark-dot" aria-hidden="true" />
       </a>
 

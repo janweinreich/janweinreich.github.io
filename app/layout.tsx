@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     url: "/",
     images: [
       {
-        url: new URL("/og.png", SITE_URL).toString(),
+        url: new URL("/og-v2.png", SITE_URL).toString(),
         width: 1200,
         height: 630,
         alt: SITE_DESCRIPTION,
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: [new URL("/og.png", SITE_URL).toString()],
+    images: [new URL("/og-v2.png", SITE_URL).toString()],
   },
 };
 

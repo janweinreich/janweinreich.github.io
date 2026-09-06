@@ -31,7 +31,7 @@ test("renders the approved identity and navigation", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>Jan<\/title>/i);
+  assert.match(html, /<title>Jans Blog<\/title>/i);
   assert.match(html, /Notes on/);
   assert.match(html, /physics, and/);
   assert.match(html, /other things\./);
@@ -93,7 +93,7 @@ test("builds static discovery files", async () => {
     /https:\/\/janweinreich\.github\.io\/writing\/believing-longing-choosing/,
   );
   assert.match(robots, /Sitemap: https:\/\/janweinreich\.github\.io\/sitemap\.xml/);
-  assert.equal(JSON.parse(manifest).name, "Jan");
+  assert.equal(JSON.parse(manifest).name, "Jans Blog");
 });
 
 test("removes disposable starter code", async () => {

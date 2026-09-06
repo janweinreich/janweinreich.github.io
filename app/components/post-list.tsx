@@ -30,6 +30,9 @@ export function PostList({ posts }: { posts: PostRecord[] }) {
           </span>
           <a href={`/writing/${post.slug}`}>
             <div>
+              {post.metadata.tags[0] ? (
+                <span className="post-topic">{post.metadata.tags[0]}</span>
+              ) : null}
               <h3 className="post-title">{post.metadata.title}</h3>
               <p className="post-summary">{post.metadata.summary}</p>
             </div>

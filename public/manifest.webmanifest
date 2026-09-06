@@ -1,6 +1,6 @@
 {
-  "name": "Jan",
-  "short_name": "Jan",
+  "name": "Jans Blog",
+  "short_name": "Jans Blog",
   "description": "Notes on AI, physics, and other things.",
   "start_url": "/",
   "display": "standalone",
