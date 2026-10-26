@@ -1,7 +1,7 @@
 import { ThemeToggle } from "./theme-toggle";
 
 const navigation = [
-  { label: "Writing", href: "/writing" },
+  { label: "Writing", href: "/writing/" },
   {
     label: "GitHub",
     href: "https://github.com/janweinreich",

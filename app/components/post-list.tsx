@@ -25,7 +25,7 @@ export function PostList({ posts }: { posts: PostRecord[] }) {
     <ol className="post-list">
       {posts.map((post) => (
         <li className="post-entry" key={post.slug}>
-          <a className="post-link" href={`/writing/${post.slug}`}>
+          <a className="post-link" href={`/writing/${post.slug}/`}>
             <div className="post-meta">
               <span className="post-topics">
                 {post.metadata.tags.map((tag) => (

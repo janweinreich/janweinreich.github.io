@@ -27,7 +27,7 @@ export default function Home() {
             <h2 id="writing-title">Latest writing</h2>
             <a
               className="section-link"
-              href="/writing"
+              href="/writing/"
               aria-label="View all writing"
             >
               All writing <span aria-hidden="true">↗</span>

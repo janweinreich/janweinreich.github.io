@@ -35,7 +35,7 @@ test("renders the approved identity and navigation", async () => {
   assert.match(html, /Notes on/);
   assert.match(html, /physics, and/);
   assert.match(html, /other things\./);
-  assert.match(html, /href="\/writing"/);
+  assert.match(html, /href="\/writing\/"/);
   assert.match(html, /href="https:\/\/github\.com\/janweinreich"/);
   assert.match(html, /One Structure, Three Languages/);
   assert.doesNotMatch(html, /Your site is taking shape|Starter Project/);
@@ -93,6 +93,10 @@ test("builds static discovery files", async () => {
   );
   assert.match(robots, /Sitemap: https:\/\/janweinreich\.github\.io\/sitemap\.xml/);
   assert.equal(JSON.parse(manifest).name, "Jans Blog");
+
+  await access(new URL("../dist/client/writing/index.html", import.meta.url));
+  await access(new URL("../dist/client/writing/chembricks-after-ebolathon-bdbv-gp-screen/index.html", import.meta.url));
+  await access(new URL("../dist/client/writing/chembricks-after-ebolathon-bdbv-gp-screen.html", import.meta.url));
 });
 
 test("removes disposable starter code", async () => {

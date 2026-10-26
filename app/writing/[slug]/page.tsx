@@ -27,7 +27,7 @@ export async function generateMetadata({
     title: post.metadata.title,
     description: post.metadata.summary,
     alternates: {
-      canonical: post.metadata.source?.url ?? `/writing/${post.slug}`,
+      canonical: post.metadata.source?.url ?? `/writing/${post.slug}/`,
     },
     openGraph: {
       type: "article",
@@ -36,7 +36,7 @@ export async function generateMetadata({
       publishedTime: post.metadata.published,
       modifiedTime: post.metadata.updated,
       tags: [...post.metadata.tags],
-      url: `/writing/${post.slug}`,
+      url: `/writing/${post.slug}/`,
     },
   };
 }
@@ -54,7 +54,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   return (
     <PageFrame>
       <article className="article-shell">
-        <a className="article-back" href="/writing">
+        <a className="article-back" href="/writing/">
           <span aria-hidden="true">←</span>
           Writing
         </a>

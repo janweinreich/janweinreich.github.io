@@ -67,9 +67,9 @@ posts.sort((left, right) =>
 
 const sitemapUrls = [
   `${site.url}/`,
-  `${site.url}/writing`,
-  `${site.url}/about`,
-  ...posts.map((post) => `${site.url}/writing/${post.slug}`),
+  `${site.url}/writing/`,
+  `${site.url}/about/`,
+  ...posts.map((post) => `${site.url}/writing/${post.slug}/`),
 ];
 const sitemap = [
   '<?xml version="1.0" encoding="UTF-8"?>',
