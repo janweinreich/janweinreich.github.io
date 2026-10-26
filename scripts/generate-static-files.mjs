@@ -2,6 +2,7 @@ import { readdir, readFile, writeFile } from "node:fs/promises";
 import matter from "gray-matter";
 
 const postsDirectory = new URL("../content/posts/", import.meta.url);
+const republicationsDirectory = new URL("../content/republications/", import.meta.url);
 const publicDirectory = new URL("../public/", import.meta.url);
 const siteConfigFile = new URL("../content/site-config.json", import.meta.url);
 
@@ -49,6 +50,17 @@ for (const entry of entries) {
   }
 }
 
+const republications = await readdir(republicationsDirectory, { withFileTypes: true });
+for (const entry of republications) {
+  if (!entry.isFile() || !entry.name.endsWith(".json")) continue;
+  const source = await readFile(new URL(entry.name, republicationsDirectory), "utf8");
+  const metadata = JSON.parse(source);
+  assertMetadata(entry.name, metadata);
+  if (!metadata.draft) {
+    posts.push({ slug: entry.name.replace(/\.json$/, ""), metadata });
+  }
+}
+
 posts.sort((left, right) =>
   right.metadata.published.localeCompare(left.metadata.published),
 );
@@ -81,8 +93,8 @@ const manifest = `${JSON.stringify(
     description: site.description,
     start_url: "/",
     display: "standalone",
-    background_color: "#f2efe7",
-    theme_color: "#3159e8",
+    background_color: "#fbfcfa",
+    theme_color: "#1a776a",
     icons: [
       {
         src: "/favicon.png",

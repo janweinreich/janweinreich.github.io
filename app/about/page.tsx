@@ -15,9 +15,6 @@ export default function AboutPage() {
     <PageFrame>
       <section className="page-content" aria-labelledby="about-page-title">
         <header className="page-intro">
-          <span className="section-number" aria-hidden="true">
-            02
-          </span>
           <h1 className="page-title" id="about-page-title">
             About
           </h1>

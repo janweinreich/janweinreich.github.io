@@ -1,0 +1,144 @@
+<figure>
+                            <img src="/republished/chembricks/media/blog/benchmarking-cmbx-models/01-hero-benchmark-parity.webp" alt="How good are the cmbx_ models? A density parity plot for atomization energy next to benchmark statistics" width="1780" height="810" loading="lazy" decoding="async">
+                        </figure>
+
+                        <p>In our <a href="/writing/chembricks-physics-gated-molecular-design">launch post</a> we promised to publish benchmarks of our own models, with error bars and stated limits, and to hold ourselves to them in public. This is the first installment. It covers four production <code>cmbx_</code> models plus one small extra, scored on tens of thousands of molecules, with every point plotted and the failure tails left in. A model you cannot see fail is a model you cannot trust.</p>
+
+                        <h2>A test set built to be hard</h2>
+                        <p>Most public quantum chemistry benchmarks are friendly. QM9, the field's workhorse, contains molecules with at most nine heavy atoms, drawn from just five elements (C, H, N, O, F), at equilibrium geometries. Scoring well on it says little about the molecules a chemist actually brings to work.</p>
+                        <p>So we built our own test set and made it hard on purpose. Starting from about 119 million molecules across four screening libraries (MERCK, PubChem3D, ChemBridge, Enamine), we selected a benchmark of roughly 100,000 molecules with two deliberate biases. First, hard chemistry is prioritized: up to half of every size stratum is filled with molecules carrying features that ML models are known to struggle with, including cage scaffolds (cubane, bicyclo[1.1.1]pentane, norbornane, adamantane), strained three and four membered rings (cyclopropanes, epoxides, aziridines, oxetanes and their sulfur cousins), spiro centers, bridged bicyclics, polyhalogenated molecules, and rare heteroatoms (P, B, Si, Se, Te, As). Second, diversity is enforced: within each stratum, molecules are deduplicated by Bemis-Murcko scaffold (via RDKit), so the set cannot be dominated by one lucky chemical family. The selection pipeline is deterministic: rerunning it with the same seed reproduces the identical benchmark file.</p>
+
+                        <figure>
+                            <img src="/republished/chembricks/media/blog/benchmarking-cmbx-models/02-benchmark-design.webp" alt="Heavy atom distribution of the 100K benchmark with QM9&#x27;s size limit marked, above counts of hard-feature tags" width="1560" height="1240" loading="lazy" decoding="async">
+                            <figcaption>Top: the size ladder of the 100K benchmark, with the range QM9 covers shaded. Bottom: deliberately hard chemistry, counted by hard-feature tag.</figcaption>
+                        </figure>
+
+                        <p>The DFT reference computation walks up this ladder in batches. The results below use the first five batches, b01 to b05: 49,992 unique molecules from 1 to 25 heavy atoms, averaging 13.3.</p>
+
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr><th scope="col">Batch</th><th scope="col" class="num">Molecules</th><th scope="col" class="num">Avg heavy atoms</th><th scope="col" class="num">Range</th><th scope="col" class="num">Median</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>b01</td><td class="num">10,000</td><td class="num">5.3</td><td class="num">1 to 7</td><td class="num">6</td></tr>
+                                    <tr><td>b02</td><td class="num">10,000</td><td class="num">9.7</td><td class="num">7 to 11</td><td class="num">10</td></tr>
+                                    <tr><td>b03</td><td class="num">10,000</td><td class="num">13.4</td><td class="num">11 to 16</td><td class="num">13</td></tr>
+                                    <tr><td>b04</td><td class="num">10,000</td><td class="num">17.0</td><td class="num">16 to 21</td><td class="num">16</td></tr>
+                                    <tr><td>b05</td><td class="num">9,992</td><td class="num">21.2</td><td class="num">21 to 25</td><td class="num">21</td></tr>
+                                    <tr><td><strong>All</strong></td><td class="num"><strong>49,992</strong></td><td class="num"><strong>13.3</strong></td><td class="num"><strong>1 to 25</strong></td><td class="num"></td></tr>
+                                </tbody>
+                            </table>
+                            <p class="table-note">The ladder benchmark, batches b01 to b05: wB97M-V DFT single points (PySCF) on g-xTB geometries, all unique structures.</p>
+                        </div>
+
+                        <h2>What the models predict, and what they are scored against</h2>
+                        <p>A quick tour of the quantities on the line, in plain language:</p>
+                        <ul>
+                            <li><strong>Atomization energy</strong> is the energy holding a molecule together relative to its isolated atoms; getting it right means the model understands bonding. One wrinkle we found while preparing this post: the dashboard's atomization values are measured against fixed per element reference constants that do not coincide with true isolated atom energies (methane, for example, reads about 476 kcal/mol where the textbook electronic value is near 420). A constant per element cancels in every error metric, so no accuracy number is affected, but it is why every energy parity below is plotted relative to a per element baseline instead of on raw axes.</li>
+                            <li><strong>Internal energy</strong> here means the molecule's total electronic energy at its geometry. Raw values grow with molecule size into the millions of kcal/mol, so where we plot them we subtract a fixed per element baseline to make the errors visible.</li>
+                            <li><strong>Solvation free energy</strong> is the free energy change when a molecule moves from the gas phase into solution at room temperature. It is a main driver of how happily a compound dissolves.</li>
+                            <li><strong>logP</strong>, the octanol/water partition coefficient, follows from a thermodynamic cycle over the solvation energies in both solvents. It is the standard measure of how greasy or water loving a molecule is.</li>
+                            <li><strong>Ionization potential and electron affinity</strong> are the energies to remove or attach an electron; they govern redox behaviour.</li>
+                        </ul>
+                        <p>Each model is scored against the quantum chemistry method it was trained to reproduce. As in the launch post: near-DFT means a model reproduces its trained reference method, and agreement with experiment can be no better in expectation than the reference method itself.</p>
+                        <ul>
+                            <li><code>cmbx_internal_energy_v2</code> and <code>cmbx_organic_electronic_v2dl</code> are scored against wB97M-V single points (PySCF) on g-xTB geometries, in vacuum, on the ladder benchmark above.</li>
+                            <li><code>cmbx_solvation_logp_v2</code> is scored against M06-2X/cc-pVDZ in vacuum plus SMD in water and 1-octanol, each with geometry optimization, on the Koutroumpa experimental logP dataset (roughly 12,500 molecules with measured logP values).</li>
+                            <li><code>cmbx_organic_smd_v2</code> is scored against wB97X/cc-pVDZ with SMD water, on a reserved test set of metal free organic ligand molecules (15 to 29 heavy atoms) from our copper/nickel binding program.</li>
+                        </ul>
+                        <p>One honest detail: every molecule can be scored in two modes. In coords mode the model is evaluated on the reference geometry; in SMILES mode the model starts from the molecular graph alone and generates its own geometry first, which is the harder, more realistic setting. Below, <code>cmbx_internal_energy_v2</code> and <code>cmbx_organic_smd_v2</code> are quoted in coords mode; <code>cmbx_solvation_logp_v2</code> and <code>cmbx_organic_electronic_v2dl</code> are quoted in SMILES mode. Each plot states its n.</p>
+
+                        <h2>Trained on bricks, tested on molecules</h2>
+                        <p>The training side is the principle we are named for. Rather than training on molecules like the ones in the test set, the <code>cmbx_</code> models learn from compact libraries of small fragment bricks: local atomic environments whose behaviour recurs across organic chemistry. The solvation model, for example, is trained on roughly 236,000 such fragments, then evaluated on real drug-like molecules, most far larger than any training fragment. An applicability check travels with every prediction: it warns when a molecule sits far from the training fragments. The decomposition method is patent pending, so this post describes the principle, not the recipe; what the benchmark shows is whether the transfer actually works.</p>
+
+                        <h2>The numbers</h2>
+                        <p>The table below is our current dashboard accuracy report, one headline number per model: the mean absolute error, or MAE. The parity plots then add the median error (MedAE), which is what a typical molecule sees, and RMSE, which the worst cases dominate. When MAE sits far above MedAE, a tail of hard molecules is dragging the average, and the plots show exactly where. For rough anchors: 1 kcal/mol is the traditional bar for chemical accuracy in thermochemistry, and logP within 0.5 to 1 log unit is the territory of good empirical estimators.</p>
+
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr><th scope="col">Model</th><th scope="col">Headline quantity</th><th scope="col" class="num">n</th><th scope="col" class="num">MAE</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><code>cmbx_internal_energy_v2</code></td><td>Atomization energy, vacuum (kcal/mol)</td><td class="num">47,393</td><td class="num">5.10</td></tr>
+                                    <tr><td><code>cmbx_organic_smd_v2</code></td><td>Internal energy in water (kcal/mol)</td><td class="num">8,638</td><td class="num">5.22</td></tr>
+                                    <tr><td><code>cmbx_solvation_logp_v2</code></td><td>Octanol/water logP</td><td class="num">11,468</td><td class="num">0.55</td></tr>
+                                    <tr><td><code>cmbx_organic_electronic_v2dl</code></td><td>Atomization energy, vacuum (kcal/mol)</td><td class="num">40,514</td><td class="num">3.82</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="table-note">One headline quantity per model (its lowest error result); n is the size of the scored subset. MAE is rounded to two decimals and agrees with the recomputed plot statistics to within rounding. Each plot below adds MedAE and RMSE. The solvation model also predicts water and octanol solvation free energies, shown in its figure. Dashboard model names: internal-energy-organic-v2, organic-smd-v2, smd-logP-v2, organic-electronic-v2dl.</p>
+                        </div>
+                        <p>Two disclosures before the plots. First, not every ladder molecule appears in every scored set: the current dashboard export covers 47,393 of the 49,992 ladder molecules for the direct energy model and 40,514 for the delta-ML model, and we have not yet published a per molecule accounting of that gap. Until we do, read the headline numbers as covering the scored subsets. Second, how to read the plots: the x axis is the reference value, the y axis is the model prediction, the dashed diagonal is perfect agreement, brightness shows how many molecules pile up on a logarithmic color scale, and a violet band, where shown, spans one median error around the diagonal. Points outside a plot's axis range are cropped from the picture only; every statistic includes them. All energy parities are shown relative to a per element baseline: raw energy axes grow with molecule size and depend on the choice of atomic reference constants, and the subtraction cancels both without touching a single error metric.</p>
+
+                        <h2>Atomization energy in vacuum: cmbx_internal_energy_v2</h2>
+                        <p>The typical molecule lands within 2.2 kcal/mol of the wB97M-V reference. The mean is pulled up to about 5 kcal/mol by a tail, and the size breakdown shows where that tail lives: the smallest bin, 1 to 7 heavy atoms, has a mean error of over 11 kcal/mol. That bin is where the benchmark's exotic fragments concentrate, tiny strained and unusual species with nothing nearby in training. From 8 heavy atoms upward the mean sits between roughly 3 and 5 kcal/mol and, more importantly, the median error grows only gently with size, from 1.5 to 3.5 kcal/mol across the ladder. That is the bricks transfer claim in data: what the model has learned locally carries to bigger molecules.</p>
+
+                        <figure>
+                            <img src="/republished/chembricks/media/blog/benchmarking-cmbx-models/03-internal-energy.webp" alt="Density parity plot for energy in vacuum beyond a per-element baseline and a bar chart of error by molecule size" width="1780" height="829" loading="lazy" decoding="async">
+                            <figcaption>Left: parity against wB97M-V relative to a per-element baseline; brighter means denser, log scale. Right: mean and median absolute error by heavy atom count.</figcaption>
+                        </figure>
+
+                        <h2>Energies in water: cmbx_organic_smd_v2</h2>
+                        <p>This model predicts the internal energy of organic molecules in water at the wB97X/SMD level, and it is scored only on larger molecules, 15 to 29 heavy atoms. The MedAE of 3.9 kcal/mol against an RMSE of 7.3 means typical and worst cases sit relatively close together here; the chemical domain is narrower than the ladder benchmark, so the two are not directly comparable.</p>
+                        <p>The data family behind this model comes from our collaboration with Intel: within that program we generated DFT references for roughly 1.2 million organic molecules in water alongside more than a million metal complexes, computed on Intel Xeon processor systems. Intel's <a href="https://www.intel.com/content/www/us/en/content-details/919490/chembricks-speeds-chemical-innovation-with-intel-ai-processing.html">solution brief</a> tells that story at headline level, with accuracy quoted as a single number. This page is meant as the rigorous companion. One methodological note matters here: total energies grow with molecule size into the millions of kcal/mol, so a raw total energy parity plot rewards any model with a perfect looking diagonal. The plot below subtracts the same per-element baseline from both axes first, an atomization style view that leaves every error metric unchanged and makes the correlation mean something.</p>
+
+                        <figure>
+                            <img src="/republished/chembricks/media/blog/benchmarking-cmbx-models/04-smd-water.webp" alt="Density parity plot for internal energy in water relative to a per-element baseline, against the wB97X SMD reference" width="1400" height="1330" loading="lazy" decoding="async">
+                            <figcaption>Internal energy in water relative to a per-element baseline, against the wB97X/SMD reference; brighter means denser, log scale. Subtracting the shared baseline changes no error metric, only the visual honesty.</figcaption>
+                        </figure>
+
+                        <h2>Solvation and logP: cmbx_solvation_logp_v2</h2>
+                        <p>Scored on roughly 11,500 molecules of the Koutroumpa logP dataset, from SMILES alone. The solvation energies land within about 1 kcal/mol for the typical molecule (MedAE 1.10 in water, 0.82 in octanol), and the derived logP has an MAE of 0.55 log units against the M06-2X/SMD reference cycle.</p>
+                        <p>Being precise about what that 0.55 means: it is the error against the quantum chemistry reference the model was trained to reproduce, not against the lab. Comparing the same predictions directly with the measured values (11,426 molecules with matching experimental logP) gives an MAE of about 1.1, because the reference method's own solvation error enters as well and the two error sources combine. Both numbers are real; they answer different questions.</p>
+
+                        <figure>
+                            <img src="/republished/chembricks/media/blog/benchmarking-cmbx-models/05-solvation-logp.webp" alt="Four density parity panels: logP, solvation energy in water and octanol, and vacuum internal energy relative to a per-element baseline" width="1780" height="1760" loading="lazy" decoding="async">
+                            <figcaption>Parity against the M06-2X/SMD reference for logP, both solvation free energies, and the vacuum internal energy relative to a per-element baseline (a raw total energy parity would collapse to a featureless diagonal). The violet band marks one MedAE around perfect agreement.</figcaption>
+                        </figure>
+
+                        <h2>Delta-ML atomization: cmbx_organic_electronic_v2dl</h2>
+                        <p>This model takes a different route to the same ladder benchmark: it is a delta-ML correction, starting from a fast g-xTB calculation and learning only the difference to the wB97M-V reference. Working from SMILES alone, it reaches an atomization MedAE of 1.9 kcal/mol on its scored subset of 40,514 molecules, with the same pattern of a small hard tail. The direct model and this one are scored on different subsets in different modes, so we resist ranking them against each other.</p>
+
+                        <figure>
+                            <img src="/republished/chembricks/media/blog/benchmarking-cmbx-models/06-electronic.webp" alt="Density parity plot for energy in vacuum beyond a per-element baseline from the delta-ML model against the wB97M-V reference" width="1400" height="1330" loading="lazy" decoding="async">
+                            <figcaption>The delta-ML model against wB97M-V, relative to a per-element baseline; brighter means denser, log scale.</figcaption>
+                        </figure>
+
+                        <h2>A small extra: redox on 48 molecules</h2>
+                        <p>For completeness, the <code>cmbx_redox</code> prototype (redox-v1), a delta-ML correction from a g-xTB baseline to wB97M-V for ionization potential and electron affinity. Treat this one as a smoke test, not a benchmark: 48 molecules scored in both evaluation modes gives 96 plotted points, and pooling the two modes overstates the independent sample, which is strictly 48. On that small set, electron affinity lands at MAE 0.19 eV and ionization potential at 0.35 eV, with a visible overprediction at the low end of the IP range.</p>
+
+                        <figure>
+                            <img src="/republished/chembricks/media/blog/benchmarking-cmbx-models/07-redox.webp" alt="Scatter plots of electron affinity and ionization potential for the redox prototype on 48 molecules" width="1780" height="860" loading="lazy" decoding="async">
+                            <figcaption>The redox prototype on 48 molecules, each scored in two evaluation modes. Small set, plain scatter, no density shading.</figcaption>
+                        </figure>
+
+                        <h2>The same accuracy, in minutes not a year</h2>
+                        <p>Accuracy is only half the reason these models exist; the other half is speed. Reproducing the wB97M-V reference for the roughly 50,000 molecule ladder is what the <code>cmbx_</code> models do in minutes on a single CPU thread. Computing those same DFT single points directly, on that same single thread and with no GPU, would take on the order of a year of continuous compute.</p>
+                        <p>That year is an estimate, not a measured benchmark: we scaled a typical single core hybrid DFT single point, roughly ten minutes for a drug fragment sized molecule, across the real size distribution of the test set, which puts the reference near one core year (months to a few years depending on basis set and convergence) against minutes for the models. The resulting speedup, in the range of ten thousand to a hundred thousand times, is the same order of magnitude Intel reports in its <a href="https://www.intel.com/content/www/us/en/content-details/919490/chembricks-speeds-chemical-innovation-with-intel-ai-processing.html">solution brief</a> (about one second versus twelve hours) from an independent run. Both comparisons are CPU to CPU: the point is not faster chips, it is that a trained surrogate replaces a calculation that is fundamentally expensive.</p>
+
+                        <h2>What these numbers do not say</h2>
+                        <p>A benchmark is only as honest as its caveats, so here are ours in one place:</p>
+                        <ul>
+                            <li>Errors are measured against the trained reference methods. The reference methods themselves carry error against experiment, which is why the logP number vs experiment is about double the number vs reference.</li>
+                            <li>The two evaluation modes differ: generating a geometry from SMILES costs accuracy compared with scoring on the reference geometry. We quoted each model in the mode our dashboard reports.</li>
+                            <li>Ladder coverage so far is batches b01 to b05, molecules up to 25 heavy atoms. The larger rungs of the 100K benchmark are being computed, and we will publish those numbers when they land, whatever they look like.</li>
+                            <li>The redox set is far too small to generalize from.</li>
+                            <li>The speed comparison is an order of magnitude estimate, not a measured wall time benchmark; the reference cost is scaled from a typical single core DFT single point and depends on basis set and convergence choices we did not hold fixed.</li>
+                            <li><code>cmbx_organic_electronic_v2dl</code> also predicts frontier orbital levels. Those benchmarks are still being hardened and are not reported here; they will get their own installment.</li>
+                            <li>The benchmark structures, per molecule predictions, and full computational settings (including basis sets and convergence details for the ladder references) are not yet public. Releasing them alongside the remaining ladder batches is the plan, and until then these results are our report, not yet an independently checkable artifact.</li>
+                        </ul>
+
+                        <h2>A floor, not a ceiling</h2>
+                        <p>One last thing to keep in perspective: these are the first generation of our production models. Better ones are already in training as you read this, and every future generation will face this same public benchmark, on the same deliberately hard chemistry. Expect these numbers to improve, and expect us to keep showing you where they still fall short.</p>
+
+                        <div class="post-cta">
+                            <p><strong>Check us.</strong> The fastest way to probe these models is to run your own molecule and inspect the evidence ledger behind every number.</p>
+                            <div class="post-cta-actions">
+                                <a class="post-cta-button" href="https://cmbx.ai/register">Open Chembricks AI</a>
+                                <a class="pill-link" href="https://cmbx.ai/chat">Explore the platform</a>
+                            </div>
+                        </div>
+
+                        <p>Screening and simulation results support decisions; they do not replace experimental, regulatory or safety validation. The benchmark suite grows from here, and the numbers stay public.</p>
+                        <p class="post-sign">The Chembricks team</p>

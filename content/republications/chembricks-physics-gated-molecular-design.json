@@ -1,0 +1,14 @@
+{
+  "title": "From proprietary quantum-chemistry data to physics-gated molecular design",
+  "summary": "How proprietary quantum-chemistry data becomes trained cmbx_ models, a physics-gated design loop, and two worked case studies with honest limits.",
+  "published": "2026-07-20",
+  "tags": [
+    "AI",
+    "Chemistry"
+  ],
+  "draft": false,
+  "source": {
+    "name": "ChemBricks",
+    "url": "https://chembricks.ai/blog/physics-gated-molecular-design/"
+  }
+}

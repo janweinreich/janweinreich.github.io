@@ -1,0 +1,138 @@
+<figure>
+                            <img src="/republished/chembricks/media/blog/physics-gated-molecular-design/01-hero-physics-gated-design.webp" alt="Chembricks: physics-gated molecular design" width="1779" height="809" loading="lazy" decoding="async">
+                        </figure>
+
+                        <h2>Welcome to the Chembricks blog</h2>
+                        <p>Before the technical story, a quick word on why we keep a blog at all.</p>
+                        <p>Chembricks builds tools for doing chemistry with AI agents, but doing it <em>properly</em>: with real physics underneath and an honest account of what has and hasn't been validated. That's a space full of hype, and we'd rather show our work than add to the noise. This blog is where we'll do that: walk through how the platform works, publish worked examples end-to-end, be candid about where our models are strong and where they aren't, and share what we're learning as we go.</p>
+                        <p>We'll start where it matters most: with the idea the whole company is built on.</p>
+
+                        <h2>The problem with "AI for chemistry"</h2>
+                        <p>A language model can produce a confident-sounding answer about almost any molecule. The trouble is that a plausible sentence and a physically correct one look identical on the page. Generative chemistry has a habit of proposing molecules that read beautifully and then fall apart the moment anyone checks the underlying thermodynamics, usually after they've reached a lab bench.</p>
+                        <p>Chembricks is not a language model answering chemistry questions from memory. <strong>It is an agentic environment in which an AI plans the work and named scientific tools do the calculating</strong>: proprietary Chembricks physics models and open, peer-reviewed engines, coordinated over large molecular datasets, with an explicit reliability layer that decides what may actually be claimed.</p>
+                        <p>The design philosophy is a physics-gated loop: <strong>cognition proposes, physics validates, survivors advance.</strong> A reasoning agent frames a problem and proposes candidates; the platform's physics tools calculate the properties that decide whether each candidate can survive; only the candidates that pass feed the next cycle. It inverts the usual failure mode of generative chemistry.</p>
+
+                        <figure>
+                            <img src="/republished/chembricks/media/blog/physics-gated-molecular-design/02-decision-loop.webp" alt="The physics-gated decision loop" width="1803" height="1121" loading="lazy" decoding="async">
+                            <figcaption>The physics-gated decision loop: frame, propose, calculate, challenge, learn, and then decide.</figcaption>
+                        </figure>
+
+                        <p>What makes the toolbox trustworthy is the quality of the numbers behind it. Every model under the <code>cmbx_</code> namespace is built on quantum-chemistry reference data we compute in-house with property-specific protocols. The emphasis is on <strong>having the right data at high accuracy, rather than throwing large volumes of low-quality data at a model</strong>. That efficient data-generation methodology is our protected core asset.</p>
+                        <p>A few numbers to set the scale: the production catalog holds <strong>155 callable tools across 22 scientific categories</strong>, every result is tagged with one of <strong>5 evidence classes</strong>, and answers export to <strong>4 formats</strong>. But the count isn't the point. The point is what happens between the tools.</p>
+
+                        <h2>How it works: the agent is a workflow controller</h2>
+                        <p>The platform treats molecular work as an iterative decision loop, not a one-shot answer. <strong>Each result can change the next calculation, eliminate a candidate, trigger a cross-check, or escalate the method.</strong> The agent can fan out parallel calculations, manage asynchronous jobs, inspect intermediate results, revise a candidate set, fit a surrogate, request the next informative batch, and update a live Pareto front, all within one brief.</p>
+                        <p>A validation layer runs underneath at three levels:</p>
+                        <ul>
+                            <li><strong>Input integrity.</strong> Structures are canonicalized, charge and spin are tracked, atoms are balanced, and unsupported inputs are rejected rather than silently coerced.</li>
+                            <li><strong>Method fitness.</strong> A property-specific <code>cmbx_</code> model or external engine is selected for the task; vacuum energies and implicit-solvent energies are never mixed inside one thermodynamic cycle.</li>
+                            <li><strong>Decision fitness.</strong> Candidates are ranked across several objectives at once, constraint violations stay visible, and the system states where higher-level theory or experiment becomes mandatory.</li>
+                        </ul>
+
+                        <h2>The model foundry: why a small dataset generalizes</h2>
+                        <p>The proprietary layer is a foundry: Chembricks-computed quantum-chemistry reference data becomes deployed <code>cmbx_</code> model services, while open engines remain a distinct, attributed layer the agent composes on top.</p>
+
+                        <figure>
+                            <img src="/republished/chembricks/media/blog/physics-gated-molecular-design/03-model-foundry.webp" alt="The Chembricks model foundry" width="1853" height="1099" loading="lazy" decoding="async">
+                            <figcaption>The model foundry: proprietary quantum-chemistry data becomes trained <code>cmbx_</code> services, with open engines as a separate, attributed layer.</figcaption>
+                        </figure>
+
+                        <p>The deployed <code>cmbx_</code> models are trained surrogates that reproduce quantum-chemical reference quantities in milliseconds where the underlying DFT calculation would take minutes to hours. Throughout, <strong>"near-DFT" means a model reproduces its trained reference method</strong> (wB97M-V or M06-2X) to near that method's own accuracy; agreement with experiment is bounded by the reference method's error, not implied by the phrase. A few of them:</p>
+                        <ul>
+                            <li><code>cmbx_internal_energy_v2</code>: near-DFT internal and atomization energies, trained on order 10⁵ molecules with FCHL19 / aSLATM representations.</li>
+                            <li><code>cmbx_solvation_logp_v2</code>: vacuum, water and octanol solvation free energies and logP, computed at the M06-2X / cc-pVDZ level with the SMD solvation model.</li>
+                            <li><code>cmbx_redox</code>: gas-phase ionization potential and electron affinity, a delta-ML correction trained to reproduce wB97M-V references from a g-xTB baseline.</li>
+                        </ul>
+
+                        <h3>Chemistry as building blocks</h3>
+                        <p>Here's the part we're most proud of, and the principle we're named for. The <code>cmbx_</code> models generalize because of <em>how</em> they represent a molecule. Rather than memorizing whole structures, the learning approach <strong>decomposes chemistry into transferable building blocks</strong>: local atomic environments whose behaviour recurs across organic chemistry. High-accuracy reference data computed on a compact, deliberately chosen set of these motifs then carries over to larger, previously unseen molecules assembled from the same blocks.</p>
+                        <p>The transfer is bounded, not universal: it is weakest for environments absent from training and for strongly non-local or long-range electronic effects, so an <strong>applicability-domain check travels with every prediction</strong> rather than being assumed. This is why a small, carefully generated dataset can outperform a large, noisy one. The decomposition-and-generalization method is <strong>patent-pending</strong>; this post describes the principle, not the recipe.</p>
+
+                        <h3>Open science, and giving back to it</h3>
+                        <p>The platform is deliberately two-layer. The <strong>open layer</strong> is a curated set of peer-reviewed academic engines: RDKit, the xTB family, CREST, RMG, AiZynthFinder, Morfeus, CASCADE, BoTorch and more, each keeping its own method identity in the evidence ledger. The <strong>proprietary layer</strong> is what open tools can't give: models trained on data we compute ourselves. Neither suffices alone. We stand on decades of open academic work and aim to contribute back, naming and attributing every engine we build on, and preparing an openly documented benchmark suite the community can use and check.</p>
+
+                        <figure>
+                            <img src="/republished/chembricks/media/blog/physics-gated-molecular-design/04-capability-atlas.webp" alt="Capability atlas" width="1849" height="1329" loading="lazy" decoding="async">
+                            <figcaption>Eight client-facing capability domains span the 22 functional categories of the production catalog.</figcaption>
+                        </figure>
+
+                        <h2>Case study 1: designing a reversible hydrogen carrier</h2>
+                        <p>Liquid organic hydrogen carriers (LOHCs) store hydrogen in reversible chemical bonds and release it by catalytic dehydrogenation. <strong>The design problem is inherently multi-objective:</strong> storage capacity, release energy, phase behaviour, stability, catalyst compatibility, safety, cost and availability all pull in different directions.</p>
+
+                        <figure>
+                            <img src="/republished/chembricks/media/blog/physics-gated-molecular-design/05-hydrogenation-scheme.webp" alt="Reversible hydrogenation scheme" width="1849" height="890" loading="lazy" decoding="async">
+                            <figcaption>A carrier cycles between a hydrogen-lean and a hydrogen-rich form; every candidate must be scored with the same energy method, balanced atoms and a matched reference state.</figcaption>
+                        </figure>
+
+                        <p>Two quantities drive the first pass. <strong>Gravimetric capacity</strong> is a structural fact; <strong>release energy per H₂</strong> is a thermochemical claim. And this is a <strong>thermodynamic screen only</strong>: release energy sets an equilibrium floor, but the temperature a carrier actually dehydrogenates at (typically 170 to 350 °C over Pt/Pd) is fixed by kinetics and catalyst, and long-term viability turns on cycling stability the screen doesn't address. A favourable release energy is necessary, not sufficient.</p>
+                        <p>The agent enumerated eleven carrier chemistries as balanced lean/rich pairs, scored both forms with <code>cmbx_internal_energy_v2</code>, fixed the hydrogen reference against a single benzene/cyclohexane anchor, then predicted every other pair blind and ranked capacity against release energy on a live Pareto front.</p>
+
+                        <figure>
+                            <img src="/republished/chembricks/media/blog/physics-gated-molecular-design/06-lohc-design-space.webp" alt="LOHC design space" width="2235" height="1400" loading="lazy" decoding="async">
+                            <figcaption>The live design space: each point is a lean/rich pair; N-heterocycles cluster at lower release energy, easier to unload.</figcaption>
+                        </figure>
+
+                        <p>Crucially, the screen is checked against experiment, not just plotted. Across the held-out pairs the mean absolute error is ≈0.16 kcal/mol H₂ (a small set, and mostly close analogues of the anchor; we're honest about that). And against a raw general-purpose GFN2-xTB baseline, the trained model's real advantage shows on chemically distant carriers, where a single global energy shift can't reach.</p>
+
+                        <figure>
+                            <img src="/republished/chembricks/media/blog/physics-gated-molecular-design/07-lohc-validation.webp" alt="LOHC validation and baseline comparison" width="2003" height="1047" loading="lazy" decoding="async">
+                            <figcaption>Held-out validation, and the trained model versus a raw semiempirical baseline.</figcaption>
+                        </figure>
+
+                        <p>The ranking is chemically legible: carbazole tops the trade-off but melts near 246 °C, which is exactly why N-ethylcarbazole and dibenzyltoluene are the pairs a real program carries forward. The screen reduces the search space; it does not replace expert phase, catalyst and safety judgement.</p>
+
+                        <h2>Case study 2: selecting a copper-over-iron ligand</h2>
+                        <p>Separating copper from iron is a selectivity problem: the goal is a ligand that binds Cu(II) while leaving Fe(III) behind. We use it here as a clean model problem for that kind of reasoning.</p>
+
+                        <aside class="callout" role="note">
+                            <p><strong>What this example is, and what it is not.</strong> This is an illustrative aqueous coordination-selectivity model, not a process recommendation. Industrial copper is won from acidic, iron-bearing leach liquors by solvent extraction with water-immiscible hydroxyoxime reagents on a pH swing, not by aqueous amine or amino-acid chelation, and the quantity that governs a real extraction is the liquid-liquid distribution ratio, not the aqueous stability constants computed here.</p>
+                        </aside>
+
+                        <figure>
+                            <img src="/republished/chembricks/media/blog/physics-gated-molecular-design/08-cu-fe-selectivity.webp" alt="Copper over iron selectivity" width="3067" height="1276" loading="lazy" decoding="async">
+                            <figcaption>Selectivity margin toward copper for two model chelators, from physics-based metal docking.</figcaption>
+                        </figure>
+
+                        <p>The result reproduces textbook hard-soft acid-base and charge-density chemistry directly from computed thermodynamics: the neutral N-donor is copper-selective (Cu binds, Fe(III) is rejected: a clean sign flip), while the anionic carboxylate is <em>not</em> copper-selective (both bind strongly; the raw ordering is dominated by a charge-neutralisation term and isn't a genuine iron preference). The robust output is the sign, not the magnitude.</p>
+
+                        <figure>
+                            <img src="/republished/chembricks/media/blog/physics-gated-molecular-design/09-cu-en-stability-ladder.webp" alt="Cu-en stability ladder" width="1695" height="1231" loading="lazy" decoding="async">
+                            <figcaption>Stepwise Cu(II)-ethylenediamine stability constants in the model's uncalibrated reference frame; the values and step count are model artifacts.</figcaption>
+                        </figure>
+
+                        <p>We're deliberately careful here. A monotonic ladder is generic to any successive-addition model; the model also binds ethylenediamine through one nitrogen rather than resolving the chelate ring, so the computed margin is best read as a donor-type and charge signal, and the workflow presents this as a <strong>ranked selectivity signal</strong> with higher-level calculation and bench extraction tests as the mandatory next steps.</p>
+
+                        <h2>Evidence you can challenge</h2>
+                        <p>Two things we won't do: publish flattering domain-wide accuracy numbers from small internal sets, or hide a capability that underperforms. Instead the platform reports <strong>which route to trust for which property</strong> and where its limits lie, and we're building the openly documented benchmark suite the field currently lacks, and we intend to hold our own <code>cmbx_</code> models to it in public, with error bars and stated applicability domains.</p>
+                        <p>And every answer is an inspectable evidence package, not just a paragraph. In a field crowded with black-box predictions, <strong>every number is traceable to the exact method that produced it</strong> and tagged by evidence class, auditable enough to defend in a regulatory, safety or investment review.</p>
+
+                        <figure>
+                            <img src="/republished/chembricks/media/blog/physics-gated-molecular-design/10-evidence-package.webp" alt="Evidence package flow" width="1849" height="705" loading="lazy" decoding="async">
+                            <figcaption>Every claim carries an evidence card, a raw tool ledger and a structured export, with five evidence classes kept visually distinct.</figcaption>
+                        </figure>
+
+                        <h2>Built for chemists, not just programmers</h2>
+                        <p>None of this comes with a programming tax. <strong>A chemist with no coding or AI background drives the whole platform by typing a question in plain English</strong>: no SMILES to write, no scripts, no environment to set up. The physics tools, model selection and provenance ledger all run underneath.</p>
+
+                        <figure>
+                            <img src="/republished/chembricks/media/blog/physics-gated-molecular-design/11-plain-question-answer.webp" alt="Plain question to readable answer with evidence" width="2006" height="1398" loading="lazy" decoding="async">
+                            <figcaption>One plain-language question, answered on the production system, with the structure and computed numbers exposed for anyone who wants to check them.</figcaption>
+                        </figure>
+
+                        <p>The same conversational surface that runs the two case studies above also answers a first-year student asking which of two familiar molecules is more water-soluble, quietly running the real solubility and property tools and then returning an answer pitched at the reader while still exposing the evidence. The accessibility is in the interface, not in a weaker calculation.</p>
+
+                        <h2>Two more live examples</h2>
+                        <p>Because a screenshot beats a claim, here are two more runs, executed end-to-end on the production system at <a href="https://cmbx.ai/chat">cmbx.ai/chat</a>.</p>
+                        <p><strong>Reactivity map of quinoline.</strong> Asked in one sentence to compute Fukui indices for quinoline and explain its reactive sites, the agent canonicalized the SMILES, ran an <code>xtb_fukui_indices</code> calculation, mapped the values onto numbered atoms, and identified the ring nitrogen N1 as both the most nucleophilic site (f⁻ = 0.182, the pyridine lone pair) and the most electrophilic (f⁺ = 0.118, then C4 and C8 on the π* system), consistent with textbook quinoline chemistry.</p>
+                        <p><strong>IP and EA across the acenes.</strong> A second run computed the ionization potential and electron affinity of naphthalene, anthracene and tetracene with the proprietary <code>cmbx_redox</code> model and explained the trend for electron-transport materials: electron affinity rises with ring count (from ≈0.16 eV for naphthalene toward ≈1.35 eV for tetracene) while the ionization potential falls, lowering the barrier to electron injection for n-type transport, with anthracene near the ambipolar boundary and air-stability flagged as the practical trade-off. The absolute values are model outputs; the ordering and trend are the decision signal.</p>
+
+                        <div class="post-cta">
+                            <p><strong>Try it.</strong> The fastest way to understand any of this is to run your own molecule.</p>
+                            <div class="post-cta-actions">
+                                <a class="post-cta-button" href="https://cmbx.ai/register">Open Chembricks AI</a>
+                                <a class="pill-link" href="https://cmbx.ai/chat">Explore the platform</a>
+                            </div>
+                        </div>
+
+                        <p>Screening and simulation results support decisions; they do not replace experimental, regulatory or safety validation. We'll keep publishing worked examples, and their honest boundaries, here.</p>
+                        <p class="post-sign">The Chembricks team</p>

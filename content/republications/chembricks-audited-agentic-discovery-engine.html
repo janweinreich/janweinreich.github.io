@@ -1,0 +1,168 @@
+<figure class="figure-data">
+
+                            <a href="/republished/chembricks/media/blog/audited-agentic-discovery-engine/01-hero-audited-agentic-discovery.webp" target="_blank" rel="noopener noreferrer">
+                                <img src="/republished/chembricks/media/blog/audited-agentic-discovery-engine/01-hero-audited-agentic-discovery.webp" alt="The Chembricks epistemic discovery engine: many research paths propose, named scientific methods resolve, and passed, failed and inconclusive findings are remembered" width="1780" height="810" loading="lazy" decoding="async">
+                            </a>
+                        </figure>
+
+                        <p>We did not want to build a clever chemistry demo and then mistake it for a general scientific method. We wanted to test the method itself: can LLM-assisted search become less like one long chat trajectory and more like a controlled research campaign?</p>
+                        <p>That led to a simple but load-bearing hypothesis. If several research lineages can explore independently, mutate their ideas, recombine promising directions and learn from one another, can they make better discoveries than a single reasoning path? And can they do it without ever trusting the language model to judge whether its own claims are supported?</p>
+                        <p>In this audit, “better” had a deliberately limited meaning. We asked whether branching explored more distinct core molecular structures, whether shared evidence recovered more relationships between features, and whether either produced a stronger top candidate at the same computational budget. Experimental usefulness remains a later test.</p>
+                        <p>Two further requirements followed. First, the campaign needed a durable scientific memory. A hypothesis that fails a declared test is not wasted work. When the method, conditions and result are preserved, another branch can avoid repeating the same dead end. The system therefore had to grow a structured database of tested claims that passed, failed or remained inconclusive. A transcript of persuasive answers would not be enough.</p>
+                        <p>Second, the architecture had to be more general than the chemistry task used to test it. The reusable pattern is a campaign, an executable claim, a domain-specific resolver and a recorded verdict. Chemistry is a demanding first test bed because molecules can be represented as executable artifacts and checked with models, cheminformatics and quantum calculations. Another scientific domain would need different artifacts and resolvers, but the trust boundary should remain.</p>
+                        <p>We call the resulting system the <strong>epistemic discovery engine</strong>: a research loop designed around the origin, limits and traceability of every claim it uses.</p>
+
+                        <aside class="callout callout--slogan" role="note">
+                            <p><strong>What cannot be computed shall not be hallucinated.</strong></p>
+                        </aside>
+
+                        <p>A language model may propose hypotheses, mutate them and recombine them. But every candidate must become an executable artifact and pass through a named computational resolver before the engine may record that a declared criterion passed or failed. If no resolver can answer the question, or if the calculation fails, the answer is inconclusive. Plausibility never fills in the missing number, and the model is never trusted as the judge.</p>
+
+                        <h2>Why the usual agent loop was not enough</h2>
+                        <p>Many agent demos quietly couple proposal and judgment: the model invents an idea, calls a tool, interprets the output and then narrates whether it succeeded. That is convenient, but it leaves too much scientific authority in the narration. A retry can disappear. A timeout can become a negative result. A tool version can change. A malformed molecule can be replaced without consuming the budget. After enough steps, it becomes difficult to distinguish what was computed from what was merely said.</p>
+                        <p>We split that loop in two. The <strong>search layer</strong> is allowed to be creative and probabilistic. It chooses strategies, proposes structures and decides where to explore. The <strong>evidence layer</strong> validates each candidate, runs an approved method and records what that method established. This makes the system honest about a computational result without confusing it with laboratory truth.</p>
+
+                        <h2>What we built: many lineages, one evidence layer</h2>
+                        <p>“Multiagent” here does not mean a panel of chatbots voting on the answer. It means several stateful research lineages exploring under one campaign contract. The contract fixes the objective, allowed tools, candidate and evaluation budgets, and the conditions a candidate must satisfy. Every branch shares the scientific boundary but can pursue a different strategy.</p>
+                        <p>The campaign machinery is intentionally domain-general. It knows how to branch, spend a budget, submit a claim to an approved resolver, record the verdict and select the next direction. Chemistry enters through the candidate representation and the scientific tools behind the resolver. The same architecture could support another domain only when that domain supplies equally explicit artifacts, tests and limits.</p>
+                        <aside class="callout" role="note">
+                            <p><strong>A conceptual example outside chemistry:</strong> a materials campaign might represent each candidate as a composition and crystal structure, then use a resolver to test a declared stability or conductivity criterion. The artifacts and scientific methods would change. The campaign contract, branching structure and evidence ledger could remain. This is an architectural possibility, not a result established by this chemistry audit.</p>
+                        </aside>
+                        <p>Independent roots create diversity at the start. Mutation explores nearby variations. Crossover combines ideas that emerged in different lineages. A scientist can inject a new hypothesis without erasing what the system has already learned. The point is not to imitate a laboratory org chart; it is to keep genuinely different search histories alive long enough to discover something one trajectory might miss.</p>
+
+                        <figure class="figure-data">
+
+                            <a href="/republished/chembricks/media/blog/audited-agentic-discovery-engine/03-multiagent-evolutionary-architecture.webp" target="_blank" rel="noopener noreferrer">
+                                <img src="/republished/chembricks/media/blog/audited-agentic-discovery-engine/03-multiagent-evolutionary-architecture.webp" alt="System diagram of the Chembricks multiagent evolutionary architecture, from campaign contract through independent branches, mutation, crossover, grounded sharing, resolvers, evidence ledger and selection" width="1800" height="1300" loading="lazy" decoding="async">
+                            </a>
+                            <figcaption>The system evolves multiple search lineages around one computational evidence kernel. Selection returns grounded candidates to the next round; unsupported claims never enter the loop as facts.</figcaption>
+                        </figure>
+
+                        <h3>The branch changes only after measurement</h3>
+                        <p>Each branch proposes a fixed number of candidates. Invalid structures still consume their slots; a bad answer never earns a free second chance. Valid candidates pass to a resolver, and only the resolver's result can determine what the branch keeps, mutates or offers for crossover. This turns evolution into a sequence of measured decisions rather than a chain of self-reinforcing stories.</p>
+
+                        <h3>The shared memory is a ledger, not a conversation</h3>
+                        <p>The branches do not exchange confidence or vote on what sounds right. They share completed records: the claim, the method, the result and the verdict. A supported relation can guide another branch. A failed relation can prevent repeated work. An inconclusive result can reveal where a better method is needed.</p>
+                        <p>These verdicts accumulate in an append-only, tamper-evident claim ledger. It is the growing memory of what the campaign tested, not a transcript of what its agents believed. Positive and negative findings have the same status as evidence under their named conditions. Each branch can use that memory while retaining its own history and direction.</p>
+                        <p>Suppose one branch proposes that adding a particular functional group will improve the target property. The resolver finds that the declared criterion is not met. Another branch can now avoid repeating the same substitution, challenge the conditions of the test or combine the failed idea with a different mechanism. The negative result changes the search instead of disappearing into a chat transcript.</p>
+
+                        <h2>The trust boundary: proposers generate, resolvers decide</h2>
+                        <p>The handoff between search and evidence is an <strong>executable claim</strong>: a specific candidate, a specific test, a named method and a fixed success criterion. “This molecule looks promising” can start a branch. “Under this named calculation, its electronic gap exceeds the declared threshold” can be computed.</p>
+                        <p>A resolver computes the declared test. It may use a cheminformatics descriptor, a fast Chembricks model, an approximate quantum calculation, a higher-cost cross-check or reserved test data. Only that resolver writes one of three outcomes:</p>
+                        <ul>
+                            <li><strong>Passed:</strong> the declared computational criterion was met.</li>
+                            <li><strong>Failed:</strong> the declared criterion was not met.</li>
+                            <li><strong>Inconclusive:</strong> the structure, computation or available evidence could not support a verdict.</li>
+                        </ul>
+                        <p>Passed and failed always mean under the named method and recorded conditions. A timeout is not a failed molecule. A malformed response is not evidence. The engine stops at inconclusive rather than manufacturing an answer.</p>
+
+                        <figure class="figure-data">
+
+                            <a href="/republished/chembricks/media/blog/audited-agentic-discovery-engine/02-proposer-resolver-ledger.webp" target="_blank" rel="noopener noreferrer">
+                                <img src="/republished/chembricks/media/blog/audited-agentic-discovery-engine/02-proposer-resolver-ledger.webp" alt="Trust boundary from proposer to executable claim, computational resolver, verdict and hash-chained evidence ledger" width="1800" height="1000" loading="lazy" decoding="async">
+                            </a>
+                            <figcaption>The language model proposes; named computational resolvers assign the declared verdict; passed, failed and inconclusive outcomes enter a tamper-evident ledger.</figcaption>
+                        </figure>
+
+                        <h2>What a real campaign feels like</h2>
+                        <p>A diagram can make an architecture look cleaner than an actual run. In practice, the engine moves through two connected but distinct rhythms: a broad search that creates and recombines candidates, and a promotion path that asks stronger scientific methods to examine only the candidates that earn the extra cost.</p>
+
+                        <div class="trace-pair">
+                            <section class="trace-card trace-card--search" aria-labelledby="trace-search-title">
+                                <p class="trace-eyebrow">The search rhythm</p>
+                                <h3 id="trace-search-title">From competing ideas to grounded crossover</h3>
+                                <div class="trace-steps">
+                                    <div class="trace-step">
+                                        <span class="trace-step-number" aria-hidden="true">A</span>
+                                        <p><strong>Fix the question.</strong> Define the target, allowed tools, budget and success criteria before search begins.</p>
+                                    </div>
+                                    <div class="trace-step">
+                                        <span class="trace-step-number" aria-hidden="true">B</span>
+                                        <p><strong>Open independent lineages.</strong> Let different strategies explore without collapsing immediately into one consensus.</p>
+                                    </div>
+                                    <div class="trace-step">
+                                        <span class="trace-step-number" aria-hidden="true">C</span>
+                                        <p><strong>Measure before changing direction.</strong> Resolve every candidate, then mutate or recombine the grounded winners.</p>
+                                    </div>
+                                    <div class="trace-step">
+                                        <span class="trace-step-number" aria-hidden="true">D</span>
+                                        <p><strong>Remember the result.</strong> Put successful, failed and inconclusive claims into the same durable evidence history.</p>
+                                    </div>
+                                </div>
+                                <p class="trace-caveat">This is an audited search trace, not evidence that a selected molecule is experimentally useful.</p>
+                            </section>
+
+                            <section class="trace-card trace-card--physics" aria-labelledby="trace-physics-title">
+                                <p class="trace-eyebrow">The evidence rhythm</p>
+                                <h3 id="trace-physics-title">From proxy score to a pinned binary</h3>
+                                <div class="trace-steps">
+                                    <div class="trace-step">
+                                        <span class="trace-step-number" aria-hidden="true">A</span>
+                                        <p><strong>Screen broadly.</strong> Use fast, appropriate methods to compare many candidates at the first evidence layer.</p>
+                                    </div>
+                                    <div class="trace-step">
+                                        <span class="trace-step-number" aria-hidden="true">B</span>
+                                        <p><strong>Promote selectively.</strong> Send the strongest candidate to a more expensive calculation only when it can change a decision.</p>
+                                    </div>
+                                    <div class="trace-step">
+                                        <span class="trace-step-number" aria-hidden="true">C</span>
+                                        <p><strong>Pin the method.</strong> Preserve the executable, input, charge, spin, termination state and parsed result.</p>
+                                    </div>
+                                    <div class="trace-step">
+                                        <span class="trace-step-number" aria-hidden="true">D</span>
+                                        <p><strong>Keep the boundary visible.</strong> A computational verdict is evidence under a method, not a claim of experimental truth.</p>
+                                    </div>
+                                </div>
+                                <p class="trace-caveat">This path validates production routing and provenance. It is not an autonomous discovery result.</p>
+                            </section>
+                        </div>
+
+                        <h2 id="headline-audit-results">Then we tested whether the architecture changed discovery</h2>
+                        <p>Building the machinery was not enough. We wanted to know whether multiple lineages actually found more than one long reasoning path. We also wanted to know whether shared evidence improved anything beyond the story the agents told about themselves.</p>
+                        <p>We wrote the comparisons before the reruns, fixed equal search budgets, kept every failed candidate in the count and repeated the campaign from new random starting points. The central result is easier to state:</p>
+
+                        <blockquote>
+                            <p><strong>The engine searched more broadly, but it did not produce a better top candidate.</strong></p>
+                        </blockquote>
+
+                        <p>The independent branches consistently explored a wider range of molecular structures than one search path. Shared evidence also changed what the campaign noticed: it became better at finding combinations of features that matter together, while paying less attention to simpler effects considered in isolation.</p>
+                        <p>Those gains came with an important limit. Shared memory did not improve the best candidate score, and a classical optimizer remained better at driving a single numerical objective to its highest point. The agentic layer should therefore complement specialized optimizers, not replace them. Its role is to diversify hypotheses, preserve why a branch changed direction and decide which candidates deserve stronger evidence.</p>
+                        <p>This is the kind of negative result we wanted the architecture to surface. A system that only reports its wins is not a discovery engine. A system that can reveal where branching helps, where memory merely reallocates attention and where a simpler method remains stronger is beginning to behave like a controlled research instrument.</p>
+
+                        <h2>Why this matters for a discovery team</h2>
+                        <p>Fast prediction alone does not decide where to search next. A discovery team may evaluate thousands of candidates and still lose the reasoning behind promising and unpromising directions. The epistemic engine preserves that history, explores several strategies at once and shows why each surviving candidate earned further attention.</p>
+                        <p>This is how broader search becomes useful in practice. It does not automatically create a better molecule. It gives scientists a larger, structured set of testable options and helps reserve expensive computation or laboratory work for a smaller evidence-backed group.</p>
+
+                        <h2>The bottleneck moved from prediction to reasoning</h2>
+                        <p>This orchestration layer sits above the real foundation of Chembricks: proprietary quantum-chemistry data and the fast <code>cmbx_</code> models trained on it. Those models are the primary moat. The epistemic engine is an additional capability that decides how to use predictions, other scientific methods and human direction in a traceable campaign.</p>
+                        <p>That distinction changes the system design. Chembricks predictions return so quickly that molecular scoring is no longer the practical bottleneck in a broad campaign. The limiting resource becomes the language model's proposal, optional reasoning and retry time.</p>
+                        <p>The answer is not to make every step “more intelligent.” It is to spend reasoning where it can alter a decision: inexpensive proposers for breadth, stronger reasoning for a small number of consequential choices, and physics-based calculations only for promoted candidates.</p>
+
+                        <figure class="figure-data">
+
+                            <a href="/republished/chembricks/media/blog/audited-agentic-discovery-engine/06-physics-latency.webp" target="_blank" rel="noopener noreferrer">
+                                <img src="/republished/chembricks/media/blog/audited-agentic-discovery-engine/06-physics-latency.webp" alt="Comparison showing fast Chembricks molecular screening, language-model reasoning as the campaign bottleneck, and deeper physics reserved for promoted candidates" width="1800" height="1150" loading="lazy" decoding="async">
+                            </a>
+                            <figcaption>At the broad screening layer, the agent waits on language-model inference and reasoning, not on Chembricks molecular prediction.</figcaption>
+                        </figure>
+
+                        <h2>What we built, and what we did not</h2>
+                        <p>The July audit leaves us with a rigorous, unusually auditable computational-discovery engine. It can run multiple research lineages, turn their proposals into executable claims, assign verdicts through named computation, keep failed attempts visible and accumulate a grounded claim ledger. It produced repeated gains in search breadth and recovery of feature interactions.</p>
+                        <p>The campaign pattern is designed to span scientific domains, but the evidence in this article is chemistry-specific. Generality is an architectural claim to test next, not a result we can declare from one domain.</p>
+                        <p>It is not a universally state-of-the-art autonomous scientist. It did not beat a classical optimizer at finding the best-scoring candidate. It has not yet produced a discovery validated by an independent high-level calculation and a wet-lab experiment.</p>
+                        <p>For Chembricks, that is the right shape of the result. Our data and models make high-quality molecular prediction fast. The epistemic engine adds a way to search over those predictions without confusing eloquence for evidence. Scientists remain responsible for the question, the acceptable methods and the final experimental interpretation.</p>
+                        <aside class="callout" role="note">
+                            <p><strong>The defensible claim:</strong> Chembricks is built on proprietary quantum-chemistry data and fast <code>cmbx_</code> models. The epistemic discovery engine is one capability above that foundation: a multi-branch research system in which language models explore, named computation assigns declared verdicts, and the evidence trail remains auditable.</p>
+                        </aside>
+                        <p>The next milestone is deliberately outside the system: a prospectively declared campaign whose leading candidates survive independent high-level computation and wet-lab measurement. This layer earns trust by making each computational claim inspectable and each uncertainty impossible to hide. It does not earn trust by claiming to replace scientists.</p>
+
+                        <div class="post-cta">
+                            <p><strong>See how Chembricks data, models and grounded discovery work on your chemistry.</strong></p>
+                            <div class="post-cta-actions">
+                                <a class="post-cta-button" href="https://cmbx.ai/register">Open Chembricks AI</a>
+                                <a class="pill-link" href="/writing/chembricks-benchmarking-cmbx-models">Read the model benchmarks</a>
+                            </div>
+                        </div>
+
+                        <p>Computational screening and simulation support decisions. They do not replace experimental, safety or regulatory validation.</p>
+                        <p class="post-sign">The Chembricks team</p>

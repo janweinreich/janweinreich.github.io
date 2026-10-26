@@ -1,0 +1,14 @@
+{
+  "title": "Building the Chembricks epistemic discovery engine",
+  "summary": "How we turned LLM-assisted science from a single chat into a controlled multi-branch campaign with a durable evidence ledger.",
+  "published": "2026-07-25",
+  "tags": [
+    "AI",
+    "Chemistry"
+  ],
+  "draft": false,
+  "source": {
+    "name": "ChemBricks",
+    "url": "https://chembricks.ai/blog/audited-agentic-discovery-engine/"
+  }
+}

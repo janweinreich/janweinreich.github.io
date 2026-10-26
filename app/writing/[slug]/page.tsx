@@ -27,7 +27,7 @@ export async function generateMetadata({
     title: post.metadata.title,
     description: post.metadata.summary,
     alternates: {
-      canonical: `/writing/${post.slug}`,
+      canonical: post.metadata.source?.url ?? `/writing/${post.slug}`,
     },
     openGraph: {
       type: "article",
@@ -66,11 +66,25 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <time dateTime={post.metadata.published}>
               {post.metadata.published}
             </time>
+            {post.metadata.updated && post.metadata.updated !== post.metadata.published ? (
+              <span>Updated <time dateTime={post.metadata.updated}>{post.metadata.updated}</time></span>
+            ) : null}
             {post.metadata.tags.map((tag) => (
               <span key={tag}>{tag}</span>
             ))}
           </div>
         </header>
+
+        {post.metadata.source ? (
+          <aside className="republication-notice" aria-label="Republication">
+            <span className="republication-label">Republication</span>
+            <p>
+              I wrote this article for {post.metadata.source.name}. Originally published on{" "}
+              <time dateTime={post.metadata.published}>{post.metadata.published}</time>.
+              {" "}<a href={post.metadata.source.url}>Read the original on {post.metadata.source.name} ↗</a>
+            </p>
+          </aside>
+        ) : null}
 
         <div className="article-body">
           <Article />

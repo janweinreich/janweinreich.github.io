@@ -1,0 +1,15 @@
+{
+  "title": "What's new in the Chembricks Virtual Lab",
+  "summary": "Four end to end demo workflows, IR and 13C NMR spectra prediction, and provenance for every number.",
+  "published": "2026-07-16",
+  "updated": "2026-07-20",
+  "tags": [
+    "AI",
+    "Chemistry"
+  ],
+  "draft": false,
+  "source": {
+    "name": "ChemBricks",
+    "url": "https://chembricks.ai/blog/whats-new-in-the-virtual-lab/"
+  }
+}

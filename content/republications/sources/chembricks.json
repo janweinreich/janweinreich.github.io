@@ -1,0 +1,285 @@
+{
+  "imported": "2026-10-26",
+  "articles": [
+    {
+      "slug": "chembricks-six-architectures-learning-curve",
+      "title": "A head start from physics beats a bigger AI model",
+      "published": "2026-09-07",
+      "paragraphs": 33,
+      "headings": 7,
+      "tables": 0,
+      "figures": 5,
+      "sourceSha256": "48bc95d06b610f36f9b54eb0a30bdd9d0aefe7c78c3800c8a282ffb240568eff",
+      "bodySha256": "bb528a1fee67cfde4ad6a84e7961f59f1fd5868f7ee61d73e4eec51fa3a52c1a"
+    },
+    {
+      "slug": "chembricks-after-ebolathon-bdbv-gp-screen",
+      "title": "After the hackathon: 2,307 molecules against an ebolavirus glycoprotein on a desktop machine",
+      "published": "2026-08-08",
+      "updated": "2026-08-20",
+      "paragraphs": 34,
+      "headings": 8,
+      "tables": 3,
+      "figures": 5,
+      "sourceSha256": "2e9671eb59ec4b32aefef9003d439c5d013b2727a0953f26ee2b2c5692f55111",
+      "bodySha256": "f795dcb22922479a1bfe1e9b007ca529edd63aec9d90d3b5bb571fff78b3c995"
+    },
+    {
+      "slug": "chembricks-audited-agentic-discovery-engine",
+      "title": "Building the Chembricks epistemic discovery engine",
+      "published": "2026-07-25",
+      "paragraphs": 54,
+      "headings": 12,
+      "tables": 0,
+      "figures": 3,
+      "sourceSha256": "2b984a3891a85ca834e38674d34b6d1486c06ebd2bc53306dad80b937ef40c12",
+      "bodySha256": "0220132109bf7d8cbe0b76350655cdec53086f9e308056d36701fa052ced5228"
+    },
+    {
+      "slug": "chembricks-benchmarking-cmbx-models",
+      "title": "Benchmarking our models on chemistry picked to be hard",
+      "published": "2026-07-22",
+      "paragraphs": 26,
+      "headings": 12,
+      "tables": 2,
+      "figures": 6,
+      "sourceSha256": "a3ce38f3ce5c12525a76c54c52237a0577fe75f87b663b8be80582fe2bfc356b",
+      "bodySha256": "d27dc39ec405943fac63acd4592938377e6721700bcbba32bd2c4afa79998caf"
+    },
+    {
+      "slug": "chembricks-physics-gated-molecular-design",
+      "title": "From proprietary quantum-chemistry data to physics-gated molecular design",
+      "published": "2026-07-20",
+      "paragraphs": 34,
+      "headings": 11,
+      "tables": 0,
+      "figures": 10,
+      "sourceSha256": "1bcb4b2040bbda24441b6db6afdf61af67b0b519f0aa8a7c5490f5d5f5cfe029",
+      "bodySha256": "d27f7fb1edb66a3ddb76b6215abf141ea0709e7e25bd42ac97afa544cd86619c"
+    },
+    {
+      "slug": "chembricks-whats-new-in-the-virtual-lab",
+      "title": "What's new in the Chembricks Virtual Lab",
+      "published": "2026-07-16",
+      "updated": "2026-07-20",
+      "paragraphs": 6,
+      "headings": 4,
+      "tables": 0,
+      "figures": 1,
+      "sourceSha256": "ced7b2b8b62e873ea0084cf089be60b2da2df0985739c5cb8012e025fae458ff",
+      "bodySha256": "55adb2a4b7674cfdaebb57084abfa17152aa17ae45d4718ad479815f6b6e621b"
+    }
+  ],
+  "assets": [
+    {
+      "url": "https://chembricks.ai/media/blog/six-architectures-learning-curve/01-hero-learning-curves.webp",
+      "path": "public/republished/chembricks/media/blog/six-architectures-learning-curve/01-hero-learning-curves.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/six-architectures-learning-curve/02-study-cost.webp",
+      "path": "public/republished/chembricks/media/blog/six-architectures-learning-curve/02-study-cost.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/six-architectures-learning-curve/03-cost-head-start.webp",
+      "path": "public/republished/chembricks/media/blog/six-architectures-learning-curve/03-cost-head-start.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/six-architectures-learning-curve/04-cost-from-scratch.webp",
+      "path": "public/republished/chembricks/media/blog/six-architectures-learning-curve/04-cost-from-scratch.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/six-architectures-learning-curve/05-interp-extrap.webp",
+      "path": "public/republished/chembricks/media/blog/six-architectures-learning-curve/05-interp-extrap.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/hero-pocket-b2s0219.webp",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/hero-pocket-b2s0219.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank01_B2S0219.png",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank01_B2S0219.png"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/affinity_distribution.svg",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/affinity_distribution.svg"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank01_B2S0219.svg",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank01_B2S0219.svg"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank02_B2S0034.svg",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank02_B2S0034.svg"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank03_B2S0775.svg",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank03_B2S0775.svg"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank04_B2S0564.svg",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank04_B2S0564.svg"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank05_B2S0292.svg",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank05_B2S0292.svg"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank06_B2S0307.svg",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank06_B2S0307.svg"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank07_B2S0304.svg",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank07_B2S0304.svg"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank08_B2S0880.svg",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank08_B2S0880.svg"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank09_B2S0823.svg",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank09_B2S0823.svg"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank10_B2S0233.svg",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/mol2d/rank10_B2S0233.svg"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank02_B2S0034.png",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank02_B2S0034.png"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank03_B2S0775.png",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank03_B2S0775.png"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank04_B2S0564.png",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank04_B2S0564.png"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank05_B2S0292.png",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank05_B2S0292.png"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank06_B2S0307.png",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank06_B2S0307.png"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank07_B2S0304.png",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank07_B2S0304.png"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank08_B2S0880.png",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank08_B2S0880.png"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank09_B2S0823.png",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank09_B2S0823.png"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank10_B2S0233.png",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/pocket_top_rank10_B2S0233.png"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/bottom_rank2307_B2D0123.png",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/bottom_rank2307_B2D0123.png"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/audited-agentic-discovery-engine/01-hero-audited-agentic-discovery.webp?v=20260725-motivation-first-1",
+      "path": "public/republished/chembricks/media/blog/audited-agentic-discovery-engine/01-hero-audited-agentic-discovery.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/audited-agentic-discovery-engine/03-multiagent-evolutionary-architecture.webp?v=20260725-accessible-1",
+      "path": "public/republished/chembricks/media/blog/audited-agentic-discovery-engine/03-multiagent-evolutionary-architecture.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/audited-agentic-discovery-engine/02-proposer-resolver-ledger.webp?v=20260725-accessible-1",
+      "path": "public/republished/chembricks/media/blog/audited-agentic-discovery-engine/02-proposer-resolver-ledger.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/audited-agentic-discovery-engine/06-physics-latency.webp?v=20260725-story-1",
+      "path": "public/republished/chembricks/media/blog/audited-agentic-discovery-engine/06-physics-latency.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/benchmarking-cmbx-models/01-hero-benchmark-parity.webp",
+      "path": "public/republished/chembricks/media/blog/benchmarking-cmbx-models/01-hero-benchmark-parity.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/benchmarking-cmbx-models/02-benchmark-design.webp",
+      "path": "public/republished/chembricks/media/blog/benchmarking-cmbx-models/02-benchmark-design.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/benchmarking-cmbx-models/03-internal-energy.webp",
+      "path": "public/republished/chembricks/media/blog/benchmarking-cmbx-models/03-internal-energy.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/benchmarking-cmbx-models/04-smd-water.webp",
+      "path": "public/republished/chembricks/media/blog/benchmarking-cmbx-models/04-smd-water.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/benchmarking-cmbx-models/05-solvation-logp.webp",
+      "path": "public/republished/chembricks/media/blog/benchmarking-cmbx-models/05-solvation-logp.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/benchmarking-cmbx-models/06-electronic.webp",
+      "path": "public/republished/chembricks/media/blog/benchmarking-cmbx-models/06-electronic.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/benchmarking-cmbx-models/07-redox.webp",
+      "path": "public/republished/chembricks/media/blog/benchmarking-cmbx-models/07-redox.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/physics-gated-molecular-design/01-hero-physics-gated-design.webp",
+      "path": "public/republished/chembricks/media/blog/physics-gated-molecular-design/01-hero-physics-gated-design.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/physics-gated-molecular-design/02-decision-loop.webp",
+      "path": "public/republished/chembricks/media/blog/physics-gated-molecular-design/02-decision-loop.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/physics-gated-molecular-design/03-model-foundry.webp",
+      "path": "public/republished/chembricks/media/blog/physics-gated-molecular-design/03-model-foundry.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/physics-gated-molecular-design/04-capability-atlas.webp",
+      "path": "public/republished/chembricks/media/blog/physics-gated-molecular-design/04-capability-atlas.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/physics-gated-molecular-design/05-hydrogenation-scheme.webp",
+      "path": "public/republished/chembricks/media/blog/physics-gated-molecular-design/05-hydrogenation-scheme.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/physics-gated-molecular-design/06-lohc-design-space.webp",
+      "path": "public/republished/chembricks/media/blog/physics-gated-molecular-design/06-lohc-design-space.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/physics-gated-molecular-design/07-lohc-validation.webp",
+      "path": "public/republished/chembricks/media/blog/physics-gated-molecular-design/07-lohc-validation.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/physics-gated-molecular-design/08-cu-fe-selectivity.webp",
+      "path": "public/republished/chembricks/media/blog/physics-gated-molecular-design/08-cu-fe-selectivity.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/physics-gated-molecular-design/09-cu-en-stability-ladder.webp",
+      "path": "public/republished/chembricks/media/blog/physics-gated-molecular-design/09-cu-en-stability-ladder.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/physics-gated-molecular-design/10-evidence-package.webp",
+      "path": "public/republished/chembricks/media/blog/physics-gated-molecular-design/10-evidence-package.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/physics-gated-molecular-design/11-plain-question-answer.webp",
+      "path": "public/republished/chembricks/media/blog/physics-gated-molecular-design/11-plain-question-answer.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/demo/chat-spectra-still.webp",
+      "path": "public/republished/chembricks/media/demo/chat-spectra-still.webp"
+    }
+  ],
+  "adaptations": [
+    "Article bodies retain their paragraphs, headings, tables, and captions.",
+    "Images are local copies. Source navigation and subscription forms are not part of the republished articles.",
+    "The interactive 3D viewer is linked from a static preview; molecule SMILES remain copyable.",
+    "Em dashes are replaced with commas to match the blog's punctuation style."
+  ]
+}

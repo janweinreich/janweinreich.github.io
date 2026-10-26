@@ -1,0 +1,14 @@
+{
+  "title": "A head start from physics beats a bigger AI model",
+  "summary": "Six AI models, one chemistry problem, and a measured compute bill. Giving a model a fast physics calculation to correct beat making it bigger or feeding it more data.",
+  "published": "2026-09-07",
+  "tags": [
+    "AI",
+    "Chemistry"
+  ],
+  "draft": false,
+  "source": {
+    "name": "ChemBricks",
+    "url": "https://chembricks.ai/blog/six-architectures-learning-curve/"
+  }
+}

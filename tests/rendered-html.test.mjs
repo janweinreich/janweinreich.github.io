@@ -36,7 +36,6 @@ test("renders the approved identity and navigation", async () => {
   assert.match(html, /physics, and/);
   assert.match(html, /other things\./);
   assert.match(html, /href="\/writing"/);
-  assert.match(html, /href="\/about"/);
   assert.match(html, /href="https:\/\/github\.com\/janweinreich"/);
   assert.match(html, /One Structure, Three Languages/);
   assert.doesNotMatch(html, /Your site is taking shape|Starter Project/);
@@ -122,5 +121,62 @@ test("uses document navigation compatible with static hosting", async () => {
 
   for (const source of sources) {
     assert.doesNotMatch(source, /next\/link/);
+  }
+});
+
+test("republishes all six ChemBricks articles with their original dates and canonical links", async () => {
+  const dates = {
+    "six-architectures-learning-curve": "2026-09-07",
+    "after-ebolathon-bdbv-gp-screen": "2026-08-08",
+    "audited-agentic-discovery-engine": "2026-07-25",
+    "benchmarking-cmbx-models": "2026-07-22",
+    "physics-gated-molecular-design": "2026-07-20",
+    "whats-new-in-the-virtual-lab": "2026-07-16",
+  };
+  const sitemap = await readFile(new URL("../dist/client/sitemap.xml", import.meta.url), "utf8");
+
+  for (const [sourceSlug, published] of Object.entries(dates)) {
+    const slug = `chembricks-${sourceSlug}`;
+    const metadata = JSON.parse(await readFile(new URL(`../content/republications/${slug}.json`, import.meta.url), "utf8"));
+    assert.equal(metadata.published, published);
+    assert.equal(metadata.source.url, `https://chembricks.ai/blog/${sourceSlug}/`);
+
+    const response = await render(`/writing/${slug}`);
+    assert.equal(response.status, 200, slug);
+    const html = await response.text();
+    assert.match(html, /I wrote this article for/);
+    assert.match(html, /aria-label="Republication"/);
+    assert.match(html, /class="republication-body"><(?:figure|p)\b/);
+    const canonical = [...html.matchAll(/<link\b[^>]*>/g)].map(([tag]) => tag).find(tag => tag.includes('rel="canonical"'));
+    assert.ok(canonical?.includes(`href="${metadata.source.url}"`), slug);
+    assert.ok(html.includes(published), slug);
+    assert.ok(sitemap.includes(`/writing/${slug}`), slug);
+
+    if (sourceSlug === "after-ebolathon-bdbv-gp-screen") {
+      assert.equal(metadata.updated, "2026-08-20");
+      assert.match(html, /Open the interactive 3D figure on ChemBricks/);
+      assert.match(html, /data-smiles=/);
+    }
+  }
+});
+
+test("includes complete imported bodies and local figure assets without source scripts", async () => {
+  const manifest = JSON.parse(await readFile(new URL("../content/republications/sources/chembricks.json", import.meta.url), "utf8"));
+  assert.equal(manifest.articles.length, 6);
+
+  for (const article of manifest.articles) {
+    const html = await readFile(new URL(`../content/republications/${article.slug}.html`, import.meta.url), "utf8");
+    assert.doesNotMatch(html, /<(script|iframe|form)\b|\son[a-z]+\s*=/i);
+    assert.ok((html.match(/<p[\s>]/g) ?? []).length >= article.paragraphs);
+    assert.equal((html.match(/<h[2-6][\s>]/g) ?? []).length, article.headings);
+    assert.equal((html.match(/<table[\s>]/g) ?? []).length, article.tables);
+    assert.equal((html.match(/<figcaption[\s>]/g) ?? []).length, article.figures);
+  }
+
+  for (const asset of manifest.assets) {
+    const contents = await readFile(new URL(`../${asset.path}`, import.meta.url));
+    assert.ok(contents.length > 0, asset.path);
+    assert.doesNotMatch(contents.subarray(0, 128).toString(), /<!doctype html>|<html\b/i, asset.path);
+    await access(new URL(`../dist/client/${asset.path.replace(/^public\//, "")}`, import.meta.url));
   }
 });

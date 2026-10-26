@@ -48,8 +48,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   colorScheme: "light dark",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f2efe7" },
-    { media: "(prefers-color-scheme: dark)", color: "#111210" },
+    { media: "(prefers-color-scheme: light)", color: "#fbfcfa" },
+    { media: "(prefers-color-scheme: dark)", color: "#101418" },
   ],
 };
 
@@ -59,8 +59,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <script dangerouslySetInnerHTML={{ __html: `try{const t=localStorage.getItem("blog-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch{}` }} />
+        {children}
+      </body>
     </html>
   );
 }

@@ -1,0 +1,15 @@
+{
+  "title": "After the hackathon: 2,307 molecules against an ebolavirus glycoprotein on a desktop machine",
+  "summary": "A Boltz-2 co-folding screen of 2,307 compounds against the Bundibugyo ebolavirus glycoprotein pocket, run on a local Tenstorrent workstation. What scored, and how much of it you should believe.",
+  "published": "2026-08-08",
+  "updated": "2026-08-20",
+  "tags": [
+    "AI",
+    "Chemistry"
+  ],
+  "draft": false,
+  "source": {
+    "name": "ChemBricks",
+    "url": "https://chembricks.ai/blog/after-ebolathon-bdbv-gp-screen/"
+  }
+}

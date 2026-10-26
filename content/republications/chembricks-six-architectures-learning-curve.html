@@ -1,0 +1,104 @@
+<figure class="figure-data">
+
+                            <a href="/republished/chembricks/media/blog/six-architectures-learning-curve/01-hero-learning-curves.webp" target="_blank" rel="noopener noreferrer">
+                                <img src="/republished/chembricks/media/blog/six-architectures-learning-curve/01-hero-learning-curves.webp" alt="Two shaded bands of test error against training-set size, the physics-assisted band sitting entirely below the from-scratch band" width="1240" height="960" loading="lazy" decoding="async">
+                            </a>
+                            <figcaption>How the error falls as each model gets more training data. Each band covers the best and the worst of the six models at that training-set size. The upper band is the models learning from scratch, the lower band the same models correcting a quick physics estimate. They never overlap. Our own model traces the lower edge of both bands at almost every size, since it was the best of the six nearly everywhere it ran.</figcaption>
+                        </figure>
+
+                        <p>There are two ways to make an AI model better at chemistry. You can make the model bigger and feed it more data. Or you can give it a head start, by having it correct a fast, rough physics calculation rather than work everything out from nothing.</p>
+                        <p>We tested both, with six machine-learning models. Two are ours, chembricks-phy-AI-1 and chembricks-phy-AI-2. The other four are well-known models from the literature. They range from a compact kernel method, which works quite differently from a neural network, to some of the best-known neural networks in chemistry, all predicting the same property of the same molecules, all scored on the same 49,235 molecules that none of them ever trained on. One of the six, chemprop, reads only the flat structure diagram while the others get the 3-D geometry, which is worth remembering wherever it appears below. We also measured exactly how much computing time each one burned.</p>
+                        <p>The head start won, and it was not close.</p>
+
+                        <aside class="callout callout--slogan" role="note">
+                            <p><strong>Every model given the physics head start did better with 1,000 training molecules than any model learning from scratch managed with fifty times more.</strong></p>
+                        </aside>
+
+                        <h2>What the models were asked to do</h2>
+                        <p>The task is to predict a molecule's energy. Energy sounds abstract, but it is the quantity underneath most of the questions chemists actually ask. Which of these two forms is the stable one? Will this reaction release heat or need it? Is this structure a real molecule or a drawing that would fall apart in a flask?</p>
+                        <p>The reliable way to get that number is a quantum chemistry calculation. It is accurate and it is slow, which is why people want models that can approximate it in milliseconds.</p>
+                        <p>So we gave the six models the same reference calculations to learn from, and set the task up two ways.</p>
+                        <ul>
+                            <li><strong>From scratch.</strong> The model sees the molecule and predicts the energy. Nothing else goes in.</li>
+                            <li><strong>With a head start.</strong> A fast approximate physics method called g-xTB takes a first guess, and the model only has to learn the difference between that guess and the truth.</li>
+                        </ul>
+                        <p>The second setup asks much less of the model. It never has to learn the bulk of the physics, because the physics has already been done. It only has to learn where the quick calculation goes wrong.</p>
+                        <p>Errors below are averages of the absolute error, in kcal/mol. For scale, chemists traditionally call 1 kcal/mol chemical accuracy, meaning good enough to trust for real decisions. The rough physics guess on its own, with no model correcting it, sits at about 2.9.</p>
+
+                        <h2>The head start matters more than the model you pick</h2>
+                        <p>In the figure above, the two bands hold the same six models. The only difference is whether the physics ran first. The gap between the bands is larger than the spread of models inside either one.</p>
+                        <p>The sharpest way to put it: the <em>worst</em> result from any model with the head start, trained on just 1,000 molecules, is still better than the <em>best</em> result from any model without it, at any training size we ran, including runs on a thousand times more data. The figure stops at 50,000 molecules, where all but one model stopped; the larger runs are in the full tables.</p>
+                        <p>That is worth sitting with. A great deal of effort in AI for science goes into larger models and larger datasets. Here, one cheap physics calculation was worth more than every architectural difference on the board combined.</p>
+
+                        <h2>What it costs is the striking part</h2>
+                        <figure class="figure-data">
+
+                            <a href="/republished/chembricks/media/blog/six-architectures-learning-curve/02-study-cost.webp" target="_blank" rel="noopener noreferrer">
+                                <img src="/republished/chembricks/media/blog/six-architectures-learning-curve/02-study-cost.webp" alt="Computing time consumed by each model across the whole study, on a logarithmic scale, spanning a factor of 140" width="1780" height="660" loading="lazy" decoding="async">
+                            </a>
+                            <figcaption>Computing time each model consumed across the whole study. The scale is logarithmic, so each step to the right is ten times more. One core-hour is a single processor core running for one hour.</figcaption>
+                        </figure>
+
+                        <p>The most expensive model in the study, MACE, used 4,992 core-hours. The cheapest, our own kernel method chembricks-phy-AI-2, used 35.6. That is a factor of 140. One thing tempers it: MACE ran at its own default settings and never stopped training early, so part of that total is our schedule rather than the model.</p>
+                        <p>Put the other way round: every run our model contributed to this study, thirty of them, across both setups and every training size, together cost about a quarter of what one single MACE training run cost at the smallest training size on the board.</p>
+                        <p>And the expensive model did not buy accuracy with it. At every training size where both of them ran, on both setups, the cheap one was more accurate.</p>
+                        <p>At the small end the numbers stop sounding like machine learning at all. With the physics head start, our model trained on 1,000 molecules in about three minutes of a single processor core, and landed at 1.682. No model in the study, at any training size, at any cost, got below 3.690 without that head start.</p>
+                        <p>Plotting accuracy against cost makes the pattern easier to see. There is one plot per setup below, drawn the same way. The staircase marks the best accuracy available at each price, and anything above it is a run that something else beat on both counts at once.</p>
+
+                        <figure class="figure-data">
+
+                            <a href="/republished/chembricks/media/blog/six-architectures-learning-curve/03-cost-head-start.webp" target="_blank" rel="noopener noreferrer">
+                                <img src="/republished/chembricks/media/blog/six-architectures-learning-curve/03-cost-head-start.webp" alt="Accuracy against computing time for every run with the physics head start, with the best-value staircase drawn" width="1300" height="900" loading="lazy" decoding="async">
+                            </a>
+                            <figcaption>With the physics head start. Each marker is one training run, and the staircase marks the best accuracy on offer at each price. Lower and further left is better.</figcaption>
+                        </figure>
+
+                        <p>With the head start, the five cheapest steps of that staircase all belong to our model. It reaches an average error of 0.961 from 25,000 molecules, in under four core-hours of training.</p>
+                        <p>Everything that beats it, beats it by paying. chemprop gets to 0.897, but it needs all 993,112 training molecules and five times the compute. SpookyNet gets to 0.829 for twenty times the compute. SchNet, the most accurate model in the study, needs twenty-six times the compute to cut the error by about a fifth. That is the trade on offer, and for most work it is not an attractive one.</p>
+                        <p>Without the head start the same plot is a different shape. Every error is several times larger, chemprop holds most of the cheap end, and the best answer on the board costs 149 core-hours to train.</p>
+
+                        <figure class="figure-data">
+
+                            <a href="/republished/chembricks/media/blog/six-architectures-learning-curve/04-cost-from-scratch.webp" target="_blank" rel="noopener noreferrer">
+                                <img src="/republished/chembricks/media/blog/six-architectures-learning-curve/04-cost-from-scratch.webp" alt="Accuracy against computing time for every run without the head start, on a much larger error scale" width="1300" height="900" loading="lazy" decoding="async">
+                            </a>
+                            <figcaption>Learning from scratch, drawn the same way. Check the error axis before comparing the two: this one runs from 3 to 30 where the previous ran from 0.8 to 4.</figcaption>
+                        </figure>
+
+                        <aside class="callout" role="note">
+                            <p><strong>One accounting note, because it cuts against us.</strong> The two plots do not use the same cost rule. With the head start, every model needs the physics calculation, so charging nobody for it is fair. Without it, only chembricks-phy-AI-2 still needs physics, because of how it represents molecules. In that plot we charged it, and only it, for that cost. Doing so moves its cheapest run from 0.05 core-hours to 3.02 and knocks it off most of the staircase. Leaving that cost out would have made us look better than we are.</p>
+                        </aside>
+
+                        <h2>Where the big neural networks won</h2>
+                        <p>Two of the standout results here are not ours, and they deserve saying plainly.</p>
+                        <p><strong>SpookyNet was the most accurate model without any head start.</strong> Trained on 50,000 molecules it reached 3.690, while chemprop, trained on all 993,112, finished at 4.060, and its best anywhere was 4.000. Roughly twenty times less data, and a better answer. That is the largest data-efficiency result in the study, though it did not come cheaply: the run that produced it cost about five times the compute of chemprop's full-dataset run.</p>
+                        <p><strong>SchNet was the most accurate model with the head start</strong>, at 0.775, with SpookyNet behind it at 0.829. The kernel method that owns the cheap end lands at 0.961.</p>
+                        <p>So the honest summary is not that our model is the most accurate. It is that it gets close to the best answer on the board for one or two orders of magnitude less compute to train. Where the physics head start is available, it matters more than which model you pick, and what you save is enormous.</p>
+
+                        <h2>A result we did not expect</h2>
+                        <figure class="figure-data">
+
+                            <a href="/republished/chembricks/media/blog/six-architectures-learning-curve/05-interp-extrap.webp" target="_blank" rel="noopener noreferrer">
+                                <img src="/republished/chembricks/media/blog/six-architectures-learning-curve/05-interp-extrap.webp" alt="Paired error values showing lower error on molecules larger than any in training, for nearly every model" width="1780" height="740" loading="lazy" decoding="async">
+                            </a>
+                            <figcaption>Error on molecules the size the models trained on, against error on molecules larger than any they saw. Almost every pair runs the opposite way to the usual intuition.</figcaption>
+                        </figure>
+
+                        <p>The training molecules are all small fragments. You would expect the models to do worse on molecules bigger than anything they had seen. We checked six model and size combinations spanning both setups, and five of them went the other way.</p>
+                        <p>chembricks-phy-AI-2, learning from scratch on 25,000 molecules, averaged 5.414 on the small molecules and 3.052 on the large ones. SchNet learning from scratch was the one that behaved as expected.</p>
+                        <p>We have a guess about why, and we are flagging it as a guess. The property being predicted depends heavily on which bonds are present, and a larger molecule contains more repeats of patterns the model has already seen, so its errors may average out. We have not shown that this is the reason.</p>
+
+                        <h2>The model you can use today</h2>
+                        <p>The approach that holds the cheap end of this study, a fast physics calculation with a learned correction on top, is the one behind a model already available in the Chembricks AI API and MCP server.</p>
+                        <pre><code>tool:     cmbx_organic_electronic_v2dl
+endpoint: organic-electronic-wb97mv-v2dl
+input:    a SMILES string, or a 3-D structure
+returns:  total energy, HOMO, LUMO, HOMO-LUMO gap</code></pre>
+                        <p>One boundary worth stating: this study measured total energy only. The deployed model also returns orbital energies, and those are not covered by any number on this page.</p>
+                        <p>A slice of the underlying data is public and free for anyone, under an MIT license: <a href="https://huggingface.co/datasets/chembricks/WB96MV-ORGANIC" target="_blank" rel="noopener noreferrer">chembricks/WB96MV-ORGANIC</a> on Hugging Face, 801,781 molecular structures with reference energies, orbital energies and full provenance.</p>
+
+                        <h2>The full numbers</h2>
+                        <p>Every table behind these figures, all 72 accuracy-against-cost points, the exact protocol, how the test set was built and the methodological detail left out above, are on the <a href="https://chembricks.ai/blog/six-architectures-learning-curve/full-results/">complete results page</a>. The figures here and the tables there are generated from one committed data file, so they cannot drift apart.</p>
+
+                        <hr>
+                        <p>Access is open to anyone. You can call the model discussed here, and the rest of the physics validation layer, from <a href="https://cmbx.ai/register" target="_blank" rel="noopener noreferrer">Chembricks AI</a>.</p>

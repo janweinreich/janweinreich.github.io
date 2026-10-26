@@ -17,9 +17,6 @@ export default function WritingPage() {
     <PageFrame>
       <section className="page-content" aria-labelledby="writing-page-title">
         <header className="page-intro">
-          <span className="section-number" aria-hidden="true">
-            01
-          </span>
           <h1 className="page-title" id="writing-page-title">
             Writing
           </h1>

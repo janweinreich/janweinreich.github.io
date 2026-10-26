@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 
-import type { ComponentType } from "react";
+import { createElement, type ComponentType } from "react";
+import { RepublicationBody } from "@/app/components/republication-body";
 
 export type PostMetadata = {
   title: string;
@@ -9,6 +10,10 @@ export type PostMetadata = {
   updated?: string;
   tags: readonly string[];
   draft?: boolean;
+  source?: {
+    name: string;
+    url: string;
+  };
 };
 
 type PostModule = {
@@ -26,8 +31,19 @@ const modules = import.meta.glob<PostModule>("./posts/*.mdx", {
   eager: true,
 });
 
+const republications = import.meta.glob<PostMetadata>("./republications/*.json", {
+  eager: true,
+  import: "default",
+});
+
+const republicationBodies = import.meta.glob<string>("./republications/*.html", {
+  eager: true,
+  query: "?raw",
+  import: "default",
+});
+
 function slugFromPath(path: string) {
-  return path.split("/").at(-1)?.replace(/\.mdx$/, "") ?? "";
+  return path.split("/").at(-1)?.replace(/\.(mdx|json)$/, "") ?? "";
 }
 
 function validateMetadata(path: string, metadata: PostMetadata | undefined) {
@@ -47,9 +63,15 @@ function validateMetadata(path: string, metadata: PostMetadata | undefined) {
   if (!Array.isArray(metadata.tags)) {
     throw new Error(`${path} metadata.tags must be an array.`);
   }
+
+  if (metadata.source) {
+    if (!metadata.source.name?.trim() || new URL(metadata.source.url).protocol !== "https:") {
+      throw new Error(`${path} must identify its original publication.`);
+    }
+  }
 }
 
-export const allPosts: PostRecord[] = Object.entries(modules)
+const originalPosts: PostRecord[] = Object.entries(modules)
   .map(([path, module]) => {
     validateMetadata(path, module.metadata);
 
@@ -58,7 +80,22 @@ export const allPosts: PostRecord[] = Object.entries(modules)
       metadata: module.metadata,
       Content: module.default,
     };
-  })
+  });
+
+const republishedPosts: PostRecord[] = Object.entries(republications).map(([path, metadata]) => {
+  validateMetadata(path, metadata);
+  const html = republicationBodies[path.replace(/\.json$/, ".html")];
+  if (!html?.trim()) throw new Error(`${path} must have a complete article body.`);
+  if (!metadata.source) throw new Error(`${path} must identify its original publication.`);
+
+  return {
+    slug: slugFromPath(path),
+    metadata,
+    Content: () => createElement(RepublicationBody, { html }),
+  };
+});
+
+export const allPosts: PostRecord[] = [...originalPosts, ...republishedPosts]
   .sort((left, right) =>
     right.metadata.published.localeCompare(left.metadata.published),
   );

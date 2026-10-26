@@ -23,22 +23,27 @@ export function PostList({ posts }: { posts: PostRecord[] }) {
 
   return (
     <ol className="post-list">
-      {posts.map((post, index) => (
-        <li className="post-row" key={post.slug}>
-          <span className="empty-index" aria-hidden="true">
-            {String(index + 1).padStart(2, "0")}
-          </span>
-          <a href={`/writing/${post.slug}`}>
-            <div>
-              {post.metadata.tags[0] ? (
-                <span className="post-topic">{post.metadata.tags[0]}</span>
-              ) : null}
-              <h3 className="post-title">{post.metadata.title}</h3>
-              <p className="post-summary">{post.metadata.summary}</p>
+      {posts.map((post) => (
+        <li className="post-entry" key={post.slug}>
+          <a className="post-link" href={`/writing/${post.slug}`}>
+            <div className="post-meta">
+              <span className="post-topics">
+                {post.metadata.tags.map((tag) => (
+                  <span className="post-topic" key={tag}>{tag}</span>
+                ))}
+              </span>
+              <time className="post-date" dateTime={post.metadata.published}>
+                {formatDate(post.metadata.published)}
+              </time>
             </div>
-            <time className="post-date" dateTime={post.metadata.published}>
-              {formatDate(post.metadata.published)}
-            </time>
+            {post.metadata.source ? (
+              <span className="post-source">Republished from {post.metadata.source.name}</span>
+            ) : null}
+            <h3 className="post-title">{post.metadata.title}</h3>
+            <p className="post-summary">{post.metadata.summary}</p>
+            <span className="post-read">
+              Read article <span aria-hidden="true">↗</span>
+            </span>
           </a>
         </li>
       ))}

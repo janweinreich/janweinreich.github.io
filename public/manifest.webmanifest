@@ -4,8 +4,8 @@
   "description": "Notes on AI, physics, and other things.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f2efe7",
-  "theme_color": "#3159e8",
+  "background_color": "#fbfcfa",
+  "theme_color": "#1a776a",
   "icons": [
     {
       "src": "/favicon.png",

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PageFrame } from "./components/page-frame";
 import { PostList } from "./components/post-list";
+import { Attractor } from "./components/attractor";
 import { SITE_DESCRIPTION, TOPICS } from "@/content/site-config";
 import { publishedPosts } from "@/content/posts";
 
@@ -13,49 +14,38 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <PageFrame>
-      <div className="home-stage">
-        <section className="hero" aria-labelledby="hero-title">
-          <div className="hero-copy">
-            <h1 id="hero-title" aria-label={SITE_DESCRIPTION}>
-              <span>
-                Notes on <em>AI,</em>
-              </span>
-              <span>physics, and</span>
-              <span>other things.</span>
-            </h1>
-          </div>
+      <div className="journal">
+        <header className="journal-intro">
+          <p className="journal-topics">{TOPICS.join(" / ")}</p>
+          <h1 aria-label={SITE_DESCRIPTION}>
+            Notes on <em>AI,</em> physics, and other things.
+          </h1>
+        </header>
 
-          <div className="topic-rail" aria-label="Topics">
-            <ol>
-              {TOPICS.map((topic, index) => (
-                <li key={topic}>
-                  <span aria-hidden="true">0{index + 1}</span>
-                  <span>{topic}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </section>
-
-        <section
-          className="writing-preview home-writing"
-          aria-labelledby="writing-title"
-        >
+        <section className="journal-writing" aria-labelledby="writing-title">
           <div className="section-heading">
-            <span className="section-number" aria-hidden="true">
-              01
-            </span>
             <h2 id="writing-title">Latest writing</h2>
             <a
               className="section-link"
               href="/writing"
               aria-label="View all writing"
             >
-              All <span aria-hidden="true">→</span>
+              All writing <span aria-hidden="true">↗</span>
             </a>
           </div>
-          <PostList posts={publishedPosts.slice(0, 3)} />
+          <PostList posts={publishedPosts.slice(0, 5)} />
         </section>
+
+        <section className="company-writing" aria-labelledby="company-writing-title">
+          <h2 id="company-writing-title">Writing for ChemBricks</h2>
+          <p>
+            I write the <a href="https://chembricks.ai/blog/">ChemBricks blog</a>,
+            covering our work on AI for chemistry, molecular models, benchmarking,
+            and physics-based validation. Those articles are republished here with
+            their original dates and links to the originals.
+          </p>
+        </section>
+        <div className="journal-signature"><Attractor /></div>
       </div>
     </PageFrame>
   );

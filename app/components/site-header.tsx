@@ -1,6 +1,7 @@
+import { ThemeToggle } from "./theme-toggle";
+
 const navigation = [
   { label: "Writing", href: "/writing" },
-  { label: "About", href: "/about" },
   {
     label: "GitHub",
     href: "https://github.com/janweinreich",
@@ -16,7 +17,6 @@ export function SiteHeader() {
       </a>
       <a className="wordmark" href="/" aria-label="Jans Blog, home">
         <span>Jans Blog</span>
-        <span className="wordmark-dot" aria-hidden="true" />
       </a>
 
       <nav className="site-nav" aria-label="Primary navigation">
@@ -35,6 +35,7 @@ export function SiteHeader() {
               )}
             </li>
           ))}
+          <li><ThemeToggle /></li>
         </ul>
       </nav>
     </header>

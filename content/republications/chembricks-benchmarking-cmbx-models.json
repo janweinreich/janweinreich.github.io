@@ -1,0 +1,14 @@
+{
+  "title": "Benchmarking our models on chemistry picked to be hard",
+  "summary": "Verbatim accuracy tables and density parity plots for four production models plus redox, on a benchmark built to be hard, with the failure tails left in.",
+  "published": "2026-07-22",
+  "tags": [
+    "AI",
+    "Chemistry"
+  ],
+  "draft": false,
+  "source": {
+    "name": "ChemBricks",
+    "url": "https://chembricks.ai/blog/benchmarking-cmbx-models/"
+  }
+}
