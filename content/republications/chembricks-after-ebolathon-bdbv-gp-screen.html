@@ -1,5 +1,36 @@
 <figure>
-                            <div class="interactive-preview"><a href="https://chembricks.ai/blog/after-ebolathon-bdbv-gp-screen/#vv-wrap"><img src="/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/hero-pocket-b2s0219.webp" alt="Static preview of the co-folded ligand in the BDBV glycoprotein pocket" width="1200" height="900" loading="lazy" decoding="async"></a><p><a href="https://chembricks.ai/blog/after-ebolathon-bdbv-gp-screen/#vv-wrap">Open the interactive 3D figure on ChemBricks.</a></p></div>
+                            <div class="molecular-viewer" id="vv-wrap" data-molecular-viewer="bdbv" data-viewer-state="loading">
+                                <div class="molecular-stage" data-viewer-stage role="img" aria-label="Interactive 3D view of a co-folded ligand in the GP1-GP2 pocket of the BDBV glycoprotein" aria-describedby="molecular-hint">
+                                    <img class="molecular-poster" src="/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/hero-pocket-b2s0219.webp" alt="B2S0219 bound in the GP1-GP2 pocket" width="1200" height="900" loading="lazy" decoding="async">
+                                    <span class="molecular-hint" id="molecular-hint" data-viewer-hint>Drag to rotate · scroll or pinch to zoom</span>
+                                </div>
+                                <div class="molecular-controls">
+                                    <label for="molecular-compound">Compound</label>
+                                    <select id="molecular-compound" data-viewer-compound disabled>
+                                        <option value="top_rank01_B2S0219" selected>rank 1 · B2S0219 · aff −1.61</option>
+                                        <option value="top_rank02_B2S0034">rank 2 · B2S0034 · aff −1.59</option>
+                                        <option value="top_rank03_B2S0775">rank 3 · B2S0775 · aff −1.58</option>
+                                        <option value="top_rank04_B2S0564">rank 4 · B2S0564 · aff −1.56</option>
+                                        <option value="top_rank05_B2S0292">rank 5 · B2S0292 · aff −1.49</option>
+                                        <option value="top_rank06_B2S0307">rank 6 · B2S0307 · aff −1.46</option>
+                                        <option value="top_rank07_B2S0304">rank 7 · B2S0304 · aff −1.46</option>
+                                        <option value="top_rank08_B2S0880">rank 8 · B2S0880 · aff −1.45</option>
+                                        <option value="top_rank09_B2S0823">rank 9 · B2S0823 · aff −1.45</option>
+                                        <option value="top_rank10_B2S0233">rank 10 · B2S0233 · aff −1.44</option>
+                                        <option value="bottom_rank2302_CTRL_aspirin">decoy · aspirin · aff +2.75</option>
+                                    </select>
+                                    <div class="molecular-toggles" role="group" aria-label="3D view options">
+                                        <button type="button" data-viewer-toggle="pocket" aria-pressed="true" disabled>Pocket sidechains</button>
+                                        <button type="button" data-viewer-toggle="closeup" aria-pressed="true" disabled>Pocket close-up</button>
+                                        <button type="button" data-viewer-toggle="spin" aria-pressed="true" disabled>Spin</button>
+                                    </div>
+                                </div>
+                                <div class="molecular-message">
+                                    <span data-viewer-status role="status">Loading interactive 3D viewer...</span>
+                                    <button type="button" data-viewer-retry hidden>Retry viewer</button>
+                                </div>
+                                <noscript><p>The interactive figure needs JavaScript. The preview above shows the top hit, B2S0219.</p></noscript>
+                            </div>
                             <figcaption>Interactive: the ten strongest compounds plus the aspirin decoy, co-folded into the entry-inhibitor pocket of the Bundibugyo ebolavirus glycoprotein (the 3D structure of protein and ligand predicted together, in one calculation). GP1 light blue, GP2 light green, ligand orange, pocket sidechains grey. These are the actual model outputs, not illustrations. Drag to rotate, scroll to zoom; switch to the aspirin decoy to see a non-binder.</figcaption>
                         </figure>
 

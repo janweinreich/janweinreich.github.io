@@ -22,7 +22,7 @@
       "tables": 3,
       "figures": 5,
       "sourceSha256": "2e9671eb59ec4b32aefef9003d439c5d013b2727a0953f26ee2b2c5692f55111",
-      "bodySha256": "f795dcb22922479a1bfe1e9b007ca529edd63aec9d90d3b5bb571fff78b3c995"
+      "bodySha256": "b12f1b18eebb2dd2f61caaa14da510ae29707902d1ae6fa6132d8bdc6b46285e"
     },
     {
       "slug": "chembricks-audited-agentic-discovery-engine",
@@ -274,12 +274,68 @@
     {
       "url": "https://chembricks.ai/media/demo/chat-spectra-still.webp",
       "path": "public/republished/chembricks/media/demo/chat-spectra-still.webp"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/3Dmol-min.js",
+      "path": "public/vendor/3dmol/3Dmol-min.js"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/3dmol/3Dmol.js/master/LICENSE",
+      "path": "public/vendor/3dmol/LICENSE.txt"
+    },
+    {
+      "url": "https://3dmol.org/build/3Dmol-min.js.LICENSE.txt",
+      "path": "public/vendor/3dmol/3Dmol-min.js.LICENSE.txt"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank01_B2S0219.pdb",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank01_B2S0219.pdb"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank02_B2S0034.pdb",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank02_B2S0034.pdb"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank03_B2S0775.pdb",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank03_B2S0775.pdb"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank04_B2S0564.pdb",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank04_B2S0564.pdb"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank05_B2S0292.pdb",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank05_B2S0292.pdb"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank06_B2S0307.pdb",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank06_B2S0307.pdb"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank07_B2S0304.pdb",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank07_B2S0304.pdb"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank08_B2S0880.pdb",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank08_B2S0880.pdb"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank09_B2S0823.pdb",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank09_B2S0823.pdb"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank10_B2S0233.pdb",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/structures/top_rank10_B2S0233.pdb"
+    },
+    {
+      "url": "https://chembricks.ai/media/blog/after-ebolathon-bdbv-gp-screen/structures/bottom_rank2302_CTRL_aspirin.pdb",
+      "path": "public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/structures/bottom_rank2302_CTRL_aspirin.pdb"
     }
   ],
   "adaptations": [
     "Article bodies retain their paragraphs, headings, tables, and captions.",
     "Images are local copies. Source navigation and subscription forms are not part of the republished articles.",
-    "The interactive 3D viewer is linked from a static preview; molecule SMILES remain copyable.",
+    "The original interactive 3D viewer, all eleven structures, controls, and molecule SMILES are available locally on the republished article.",
     "Em dashes are replaced with commas to match the blog's punctuation style."
   ]
 }

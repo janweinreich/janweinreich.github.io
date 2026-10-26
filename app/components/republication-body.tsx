@@ -7,6 +7,22 @@ export function RepublicationBody({ html }: { html: string }) {
   const [copyStatus, setCopyStatus] = useState("");
 
   useEffect(() => {
+    const root = contentRef.current?.querySelector<HTMLElement>("[data-molecular-viewer]");
+    if (!root) return;
+    let disposed = false;
+    let unmount: (() => void) | undefined;
+    void import("@/app/lib/molecular-viewer").then(({ mountMolecularViewer }) => {
+      if (!disposed) unmount = mountMolecularViewer(root);
+    }).catch(() => {
+      if (disposed) return;
+      root.dataset.viewerState = "fallback";
+      const status = root.querySelector<HTMLElement>("[data-viewer-status]");
+      if (status) status.textContent = "The 3D viewer could not load. The image shows the top hit, B2S0219.";
+    });
+    return () => { disposed = true; unmount?.(); };
+  }, [html]);
+
+  useEffect(() => {
     const content = contentRef.current;
     if (!content) return;
     let active = true;

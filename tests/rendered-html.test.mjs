@@ -154,7 +154,11 @@ test("republishes all six ChemBricks articles with their original dates and cano
 
     if (sourceSlug === "after-ebolathon-bdbv-gp-screen") {
       assert.equal(metadata.updated, "2026-08-20");
-      assert.match(html, /Open the interactive 3D figure on ChemBricks/);
+      assert.match(html, /data-molecular-viewer="bdbv"/);
+      assert.match(html, /data-viewer-compound/);
+      assert.match(html, /data-viewer-toggle="pocket"/);
+      assert.match(html, /data-viewer-toggle="closeup"/);
+      assert.match(html, /data-viewer-toggle="spin"/);
       assert.match(html, /data-smiles=/);
     }
   }
@@ -179,4 +183,19 @@ test("includes complete imported bodies and local figure assets without source s
     assert.doesNotMatch(contents.subarray(0, 128).toString(), /<!doctype html>|<html\b/i, asset.path);
     await access(new URL(`../dist/client/${asset.path.replace(/^public\//, "")}`, import.meta.url));
   }
+
+  const viewerHtml = await readFile(new URL("../content/republications/chembricks-after-ebolathon-bdbv-gp-screen.html", import.meta.url), "utf8");
+  const structures = [...viewerHtml.matchAll(/<option value="([^"]+)"/g)].map(([, id]) => id);
+  assert.equal(structures.length, 11);
+  for (const id of structures) {
+    const pdb = await readFile(new URL(`../public/republished/chembricks/media/blog/after-ebolathon-bdbv-gp-screen/structures/${id}.pdb`, import.meta.url), "utf8");
+    assert.match(pdb, /^ATOM  /m, id);
+    assert.match(pdb, /^HETATM.* L /m, id);
+  }
+
+  const viewerSource = await readFile(new URL("../app/lib/molecular-viewer.ts", import.meta.url), "utf8");
+  assert.match(viewerSource, /chain: "A".*cartoon.*#a9c7e8/s);
+  assert.match(viewerSource, /chain: "B".*cartoon.*#b7d9a5/s);
+  assert.match(viewerSource, /chain: "L".*orangeCarbon/s);
+  assert.match(viewerSource, /within: \{ distance: 5/);
 });
