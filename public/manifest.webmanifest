@@ -1,7 +1,7 @@
 {
   "name": "Jans Blog",
   "short_name": "Jans Blog",
-  "description": "Notes on AI, physics, and other things.",
+  "description": "Notes on biology, chemistry, physics, and other things.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#fbfcfa",
