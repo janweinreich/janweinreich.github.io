@@ -238,6 +238,118 @@ button:focus-visible {
   text-underline-offset: 0.2em;
 }
 
+.shelf-index {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0 0 0.5rem;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.shelf-index a {
+  display: flex;
+  min-height: 3.25rem;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.85rem 0.7rem;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.shelf-index a + a {
+  border-left: 1px solid var(--line);
+}
+
+.shelf-index a:hover,
+.shelf-index a:focus-visible {
+  background: var(--accent-wash);
+  color: var(--accent);
+}
+
+.shelf-count {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.shelf {
+  padding-top: 2.25rem;
+}
+
+.shelf-head h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+}
+
+.shelf-head p {
+  max-width: 46ch;
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.shelf-list {
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.shelf-link {
+  display: block;
+  padding: 0.95rem 0.15rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.shelf-link:hover,
+.shelf-link:focus-visible {
+  background: color-mix(in srgb, var(--accent) 4%, transparent);
+}
+
+.shelf-row {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.shelf-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+}
+
+.shelf-link:hover .shelf-title,
+.shelf-link:focus-visible .shelf-title {
+  color: var(--accent);
+}
+
+.shelf-row time {
+  flex: none;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.shelf-summary {
+  display: block;
+  max-width: 62ch;
+  margin-top: 0.3rem;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
 .section-heading {
   display: flex;
   flex-wrap: wrap;
@@ -1015,6 +1127,23 @@ button:focus-visible {
 @media (max-width: 560px) {
   .site-shell {
     width: calc(100% - 2.25rem);
+  }
+
+  .shelf-index {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .shelf-index a:nth-child(3) {
+    border-left: 0;
+  }
+
+  .shelf-index a:nth-child(n + 3) {
+    border-top: 1px solid var(--line);
+  }
+
+  .shelf-row {
+    flex-direction: column;
+    gap: 0.25rem;
   }
 
   .molecular-stage {

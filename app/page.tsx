@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PageFrame } from "./components/page-frame";
-import { PostList } from "./components/post-list";
+import { Shelves } from "./components/shelves";
 import { Attractor } from "./components/attractor";
 import { SITE_DESCRIPTION, TOPICS } from "@/content/site-config";
 import { publishedPosts } from "@/content/posts";
@@ -24,7 +24,7 @@ export default function Home() {
 
         <section className="journal-writing" aria-labelledby="writing-title">
           <div className="section-heading">
-            <h2 id="writing-title">Latest writing</h2>
+            <h2 id="writing-title">Writing by subject</h2>
             <a
               className="section-link"
               href="/writing/"
@@ -33,7 +33,7 @@ export default function Home() {
               All writing <span aria-hidden="true">↗</span>
             </a>
           </div>
-          <PostList posts={publishedPosts.slice(0, 5)} />
+          <Shelves posts={publishedPosts} />
         </section>
 
         <section className="company-writing" aria-labelledby="company-writing-title">

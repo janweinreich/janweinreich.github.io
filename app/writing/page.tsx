@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PageFrame } from "../components/page-frame";
-import { PostList } from "../components/post-list";
+import { Shelves } from "../components/shelves";
 import { publishedPosts } from "@/content/posts";
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ export default function WritingPage() {
             Writing
           </h1>
         </header>
-        <PostList posts={publishedPosts} />
+        <Shelves posts={publishedPosts} />
       </section>
     </PageFrame>
   );
