@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { PageFrame } from "./components/page-frame";
-import { Shelves } from "./components/shelves";
+import { MindMap } from "./components/mind-map";
 import { Attractor } from "./components/attractor";
 import { SITE_DESCRIPTION, TOPICS } from "@/content/site-config";
+import { groupPosts } from "@/content/shelves";
 import { publishedPosts } from "@/content/posts";
 
 export const metadata: Metadata = {
@@ -12,6 +13,17 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
+  const branches = groupPosts(publishedPosts).map((group) => ({
+    id: group.id,
+    label: group.label,
+    line: group.line,
+    posts: group.posts.map((post) => ({
+      slug: post.slug,
+      title: post.metadata.title,
+      published: post.metadata.published,
+    })),
+  }));
+
   return (
     <PageFrame>
       <div className="journal">
@@ -24,7 +36,7 @@ export default function Home() {
 
         <section className="journal-writing" aria-labelledby="writing-title">
           <div className="section-heading">
-            <h2 id="writing-title">Writing by subject</h2>
+            <h2 id="writing-title">At a glance</h2>
             <a
               className="section-link"
               href="/writing/"
@@ -33,7 +45,7 @@ export default function Home() {
               All writing <span aria-hidden="true">↗</span>
             </a>
           </div>
-          <Shelves posts={publishedPosts} />
+          <MindMap branches={branches} />
         </section>
 
         <section className="company-writing" aria-labelledby="company-writing-title">
