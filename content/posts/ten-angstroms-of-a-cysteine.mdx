@@ -1,0 +1,49 @@
+---
+title: Ten angstroms of a cysteine
+summary: A pocket cut out of a predicted protein, two quantum calculations on the sulfur, and a classifier that mostly ignores the quantum part.
+published: "2026-10-27"
+tags:
+  - Chemistry
+  - AI
+draft: false
+---
+
+import { ExplorerPreview } from "@/app/components/explorer-preview";
+
+A covalent drug can use a cysteine as its anchor. The useful question is which cysteine, on which protein, is actually available. Many of the interesting proteins have no pocket that a docking program would recognize, so the usual structure-based route stops before it starts.
+
+I built the calculation that answers a narrower version of that question. Take the cysteine, keep the atoms within 10 Å of its sulfur, and compute the local chemistry of that fragment in two states: the thiol, and the thiolate left after the sulfur loses its proton. The explorer below is that calculation, site by site.
+
+<ExplorerPreview />
+
+## What gets cut out
+
+A whole protein is the wrong size for a semiempirical quantum calculation, and most of it is far from the sulfur. The cut-out keeps every residue that comes within 10 Å of the target sulfur. Bonds broken by the cut are capped with hydrogen. Charged side chains farther than 6 Å from the sulfur are neutralized, so the fragment does not carry a large net charge into the calculation for no chemical reason.
+
+The structure itself comes from Boltz-2, protonated at pH 7.4 with pdb2pqr and PROPKA. The quantum step is GFN2-xTB in implicit water, once for the thiol and once for the thiolate. The difference between those two energies is a deprotonation energy for the fragment. It is a descriptor of the prepared cluster. It is not a measured pKa, and it is not a binding free energy.
+
+Each state also keeps a fingerprint of the fragment: a Bag-of-Bonds vector, which sorts the pairwise $Z_i Z_j / r_{ij}$ terms by element pair, plus charges, orbital energies, and Fukui values from the xTB calculation. The explorer draws both the folded protein and the fragment that was actually sent to xTB.
+
+## What the model uses
+
+The label is ligandability as recorded in CysDB chemoproteomic screens. An unannotated site is not a confirmed negative, and the label is not a reaction rate.
+
+On a frozen snapshot of 8,222 sites, a CatBoost model was tested on 1,643 cysteines from 693 proteins held out by protein, so no protein appears on both sides of the split. The test set is 36.9% ligandable. Always answering "not ligandable" is therefore already 63% accurate, and a useful model has to beat that in ranking, not in raw accuracy.
+
+| Model | What it sees | ROC AUC | Precision in the top 50 |
+| --- | --- | ---: | ---: |
+| All features | Sequence, Boltz-2 structure, pocket geometry, quantum chemistry | 0.636 | 0.78 |
+| No quantum features | Everything except the xTB calculation | 0.636 | 0.72 |
+| Quantum features only | The xTB calculation alone | 0.574 | 0.62 |
+| Logistic regression | All features, linear | 0.609 | 0.66 |
+| Deprotonation energy only | One number | 0.525 | 0.46 |
+
+The quantum calculation and the model trained without it land on the same ROC AUC, 0.636. The quantum features by themselves are weaker, at 0.574. Deprotonation energy on its own is close to a coin flip.
+
+The features the full model actually leans on make that less surprising. The largest is the length of the tryptic peptide that contains the cysteine, and shorter peptides score as more ligandable. Next is how the Boltz-2 confidence at the cysteine compares with the rest of the protein, then whether that peptide sits in a mass-spectrometry window. Those are properties of how the screen detects a cysteine. The quantum descriptors of the sulfur are real, and they are not what separates the annotated sites.
+
+## What I would not conclude
+
+A high score is a reason to look at a cysteine. It is not evidence that a drug binds there. The deprotonation energy also moves with the net charge of the whole fragment, because the implicit solvent feels that charge, so the number is not a clean measure of the sulfur alone. Predicted structures add their own errors: a strained geometry, or a disulfide drawn between two cysteines that would not form one in a reducing compartment.
+
+The run behind the explorer is the full CysDB cysteine list, and it is still going. The table above stays tied to the 8,222-site snapshot, which is the comparison in which every model saw the same sites. The code is [cystiners](https://github.com/janweinreich/cystiners).
