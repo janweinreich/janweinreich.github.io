@@ -24,10 +24,10 @@ export function MindMap({ branches }: { branches: readonly MindMapBranch[] }) {
     <div className="mindmap-wrap">
       <div className="mindmap">
         <svg className="mindmap-wires" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-          <path className={open === "biology" ? "is-live" : undefined} d="M50 50 C 38 38, 24 22, 16 14" />
-          <path className={open === "chemistry" ? "is-live" : undefined} d="M50 50 C 62 38, 76 22, 84 14" />
-          <path className={open === "physics" ? "is-live" : undefined} d="M50 50 C 38 62, 24 78, 16 86" />
-          <path className={open === "elsewhere" ? "is-live" : undefined} d="M50 50 C 62 62, 76 78, 84 86" />
+          <path className={open === "biology" ? "is-live" : undefined} d="M44 46 C 34 32, 26 20, 20 13" />
+          <path className={open === "chemistry" ? "is-live" : undefined} d="M56 46 C 66 32, 74 20, 80 13" />
+          <path className={open === "physics" ? "is-live" : undefined} d="M44 54 C 34 68, 26 80, 20 87" />
+          <path className={open === "elsewhere" ? "is-live" : undefined} d="M56 54 C 66 68, 74 80, 80 87" />
         </svg>
 
         <p className="mindmap-center">Notes</p>

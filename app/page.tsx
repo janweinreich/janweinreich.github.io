@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { PageFrame } from "./components/page-frame";
 import { MindMap } from "./components/mind-map";
 import { Attractor } from "./components/attractor";
-import { SITE_DESCRIPTION, TOPICS } from "@/content/site-config";
+import { SITE_DESCRIPTION } from "@/content/site-config";
 import { groupPosts } from "@/content/shelves";
 import { publishedPosts } from "@/content/posts";
 
@@ -28,15 +28,14 @@ export default function Home() {
     <PageFrame>
       <div className="journal">
         <header className="journal-intro">
-          <p className="journal-topics">{TOPICS.join(" / ")}</p>
           <h1 aria-label={SITE_DESCRIPTION}>
-            Notes on <em>AI,</em> physics, and other things.
+            Notes on biology, chemistry, physics, and other things.
           </h1>
         </header>
 
         <section className="journal-writing" aria-labelledby="writing-title">
           <div className="section-heading">
-            <h2 id="writing-title">At a glance</h2>
+            <h2 id="writing-title">Writing</h2>
             <a
               className="section-link"
               href="/writing/"
