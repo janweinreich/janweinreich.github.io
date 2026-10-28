@@ -1,0 +1,92 @@
+.figure {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: 0.2rem;
+}
+
+.stage {
+  position: relative;
+  height: 18.5rem;
+  background: #142321;
+  background-image: linear-gradient(#d4e8e006 1px, transparent 1px), linear-gradient(90deg, #d4e8e006 1px, transparent 1px);
+  background-position: center;
+  background-size: 2rem 2rem;
+}
+
+.stage::after {
+  position: absolute;
+  inset: 0.75rem;
+  border: 1px solid #d1e7de0d;
+  content: "";
+  pointer-events: none;
+}
+
+.stage canvas, .preview {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.stage canvas { cursor: grab; touch-action: pan-y; }
+.stage canvas:focus-visible { outline: 2px solid #a4d8c9; outline-offset: -3px; }
+.figure[data-dragging="true"] canvas { cursor: grabbing; }
+.preview { pointer-events: none; }
+.preview path { fill: none; stroke-width: 0.65; opacity: 0.6; }
+.figure[data-ready="true"] .preview { visibility: hidden; }
+.figure:not([data-ready="true"]) button { visibility: hidden; }
+
+.figureNumber, .parameters, .dragHint, .axes {
+  position: absolute;
+  z-index: 1;
+  color: #afc4bc;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.015em;
+  line-height: 1.5;
+  pointer-events: none;
+}
+.figureNumber { top: 1.25rem; left: 1.5rem; }
+.parameters { top: 1.25rem; right: 1.5rem; }
+.dragHint { bottom: 1rem; left: 1.5rem; opacity: 0; transition: opacity 180ms ease; }
+.axes { right: 1.5rem; bottom: 1rem; }
+.figure:is(:hover, :focus-within) .dragHint { opacity: 1; }
+
+.figure figcaption {
+  display: flex;
+  min-height: 2.75rem;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 1rem 0.5rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+}
+.figure figcaption > span { display: inline-flex; gap: 0.5rem; align-items: center; }
+.figure figcaption i { width: 0.3rem; height: 0.3rem; border: 1px solid var(--accent); border-radius: 50%; }
+.figure button {
+  display: flex;
+  min-width: 3.75rem;
+  min-height: 2.75rem;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+}
+.figure button:focus-visible { outline-offset: -3px; }
+
+@media (max-width: 900px) { .stage { height: 17rem; } }
+@media (max-width: 640px) {
+  .stage { height: 11rem; }
+  .figureNumber, .parameters { top: 1rem; }
+  .dragHint { opacity: 1; }
+}

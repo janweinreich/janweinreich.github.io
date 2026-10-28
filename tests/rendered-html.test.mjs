@@ -39,6 +39,17 @@ test("renders the approved identity and navigation", async () => {
   assert.match(html, /href="https:\/\/github\.com\/janweinreich"/);
   assert.match(html, /One Structure, Three Languages/);
   assert.doesNotMatch(html, /Your site is taking shape|Starter Project/);
+
+  const articles = html.match(/<ol[^>]*id="home-articles"[^>]*>([\s\S]*?)<\/ol>/)?.[1];
+  assert.ok(articles, "The article index is present in the initial HTML");
+  assert.match(articles, /href="\/writing\/ten-angstroms-of-a-cysteine\/"/);
+  assert.doesNotMatch(articles, /\shidden[\s=>]/);
+  const sources = JSON.parse(await readFile(new URL("../content/republications/sources/chembricks.json", import.meta.url), "utf8"));
+  for (const article of sources.articles) {
+    assert.ok(articles.includes(`href="/writing/${article.slug}/"`), article.slug);
+  }
+  assert.match(html, /aria-label="Filter writing by subject"/);
+  assert.match(html, /Lorenz attractor/);
 });
 
 test("renders the first article, writing index, and empty about page", async () => {

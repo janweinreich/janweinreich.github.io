@@ -30,7 +30,7 @@ export function shelfId(tags: readonly string[]) {
 }
 
 export function groupPosts(posts: readonly PostRecord[]) {
-  const grouped = new Map(SHELVES.map((shelf) => [shelf.id, [] as PostRecord[]]));
+  const grouped = new Map<string, PostRecord[]>(SHELVES.map((shelf) => [shelf.id, []]));
   for (const post of posts) {
     grouped.get(shelfId(post.metadata.tags))?.push(post);
   }
