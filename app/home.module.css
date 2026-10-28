@@ -55,6 +55,7 @@
   line-height: 1.15;
 }
 
+.introActions { display: flex; flex-wrap: wrap; gap: 0 2rem; }
 .exploreLink {
   display: inline-flex;
   min-height: 2.75rem;
@@ -65,6 +66,7 @@
 }
 .exploreLink span { color: var(--accent); transition: transform 180ms ease; }
 .exploreLink:hover span { transform: translateY(3px); }
+.projectJump { color: var(--muted); }
 
 .writing { scroll-margin-top: 2rem; }
 .writingHeading, .sectionTitle { display: flex; gap: 1rem; align-items: baseline; }

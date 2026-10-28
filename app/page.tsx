@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageFrame } from "./components/page-frame";
 import { AttractorCover } from "./components/attractor-cover";
 import { WritingIndex } from "./components/writing-index";
+import { FunProjects } from "./components/fun-projects";
 import { SITE_DESCRIPTION } from "@/content/site-config";
 import { groupPosts, shelfId } from "@/content/shelves";
 import { publishedPosts } from "@/content/posts";
@@ -36,9 +37,14 @@ export default function Home() {
               <span className={styles.titleLine}>physics, and</span>{" "}
               <em>other things.</em>
             </h1>
-            <a className={styles.exploreLink} href="#writing">
-              Explore the writing <span aria-hidden="true">↓</span>
-            </a>
+            <div className={styles.introActions}>
+              <a className={styles.exploreLink} href="#writing">
+                Explore the writing <span aria-hidden="true">↓</span>
+              </a>
+              <a className={`${styles.exploreLink} ${styles.projectJump}`} href="#fun-projects">
+                Fun projects <span aria-hidden="true">↘</span>
+              </a>
+            </div>
           </div>
           <AttractorCover />
         </section>
@@ -48,9 +54,11 @@ export default function Home() {
           subjects={groups.map(({ id, label, posts: items }) => ({ id, label, count: items.length }))}
         />
 
+        <FunProjects />
+
         <section className={styles.company} aria-labelledby="company-writing-title">
           <div>
-            <span className={styles.sectionNumber} aria-hidden="true">02 /</span>
+            <span className={styles.sectionNumber} aria-hidden="true">03 /</span>
             <h2 id="company-writing-title">Writing for<br />ChemBricks</h2>
           </div>
           <div className={styles.companyCopy}>
