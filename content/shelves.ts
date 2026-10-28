@@ -18,8 +18,8 @@ export const SHELVES = [
   },
   {
     id: "elsewhere",
-    label: "Art and values",
-    line: "Making, wanting, and how a value spreads once people accept it.",
+    label: "Other thoughts",
+    line: "Thoughts on AI, the future, society, and other things.",
   },
 ] as const;
 
