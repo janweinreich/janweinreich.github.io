@@ -7,6 +7,12 @@ const navigation = [
     href: "https://github.com/janweinreich",
     external: true,
   },
+  {
+    label: "Scholar",
+    ariaLabel: "Google Scholar",
+    href: "https://scholar.google.com/citations?user=3fhtth0AAAAJ&hl=en",
+    external: true,
+  },
 ] as const;
 
 export function SiteHeader() {
@@ -24,7 +30,7 @@ export function SiteHeader() {
           {navigation.map((item) => (
             <li key={item.label}>
               {"external" in item ? (
-                <a href={item.href} target="_blank" rel="noreferrer">
+                <a href={item.href} target="_blank" rel="noreferrer" aria-label={"ariaLabel" in item ? item.ariaLabel : undefined}>
                   {item.label}
                   <span className="external-mark" aria-hidden="true">
                     ↗
