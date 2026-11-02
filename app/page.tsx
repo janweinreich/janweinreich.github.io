@@ -40,7 +40,7 @@ export default function Home() {
             </h1>
             <div className={styles.introActions}>
               <a className={styles.exploreLink} href="#writing">
-                Explore the writing <span aria-hidden="true">↓</span>
+                Writing <span aria-hidden="true">↓</span>
               </a>
               <a className={`${styles.exploreLink} ${styles.projectJump}`} href="#fun-projects">
                 Fun projects <span aria-hidden="true">↘</span>
@@ -59,8 +59,7 @@ export default function Home() {
 
         <section className={styles.company} aria-labelledby="company-writing-title">
           <div>
-            <span className={styles.sectionNumber} aria-hidden="true">03 /</span>
-            <h2 id="company-writing-title">Writing for<br />ChemBricks</h2>
+            <h2 id="company-writing-title">Writing for ChemBricks</h2>
           </div>
           <div className={styles.companyCopy}>
             <p>

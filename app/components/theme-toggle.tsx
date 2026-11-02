@@ -3,28 +3,24 @@
 import { useSyncExternalStore } from "react";
 
 function subscribe(onChange: () => void) {
-  const scheme = window.matchMedia("(prefers-color-scheme: dark)");
-  scheme.addEventListener("change", onChange);
   window.addEventListener("blog-theme-change", onChange);
   return () => {
-    scheme.removeEventListener("change", onChange);
     window.removeEventListener("blog-theme-change", onChange);
   };
 }
 
 function getTheme() {
   const saved = document.documentElement.dataset.theme;
-  return saved === "light" || saved === "dark"
-    ? saved
-    : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return saved === "dark" ? "dark" : "light";
 }
 
 export function ThemeToggle() {
-  const theme = useSyncExternalStore(subscribe, getTheme, () => null);
+  const theme = useSyncExternalStore(subscribe, getTheme, () => "light");
 
   function toggleTheme() {
-    const next = (theme ?? getTheme()) === "dark" ? "light" : "dark";
+    const next = getTheme() === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = next;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === "dark" ? "#101418" : "#ffffff");
     window.dispatchEvent(new Event("blog-theme-change"));
     try {
       localStorage.setItem("blog-theme", next);
@@ -38,7 +34,7 @@ export function ThemeToggle() {
       className="theme-toggle"
       type="button"
       onClick={toggleTheme}
-      aria-label={theme ? `Switch to ${theme === "dark" ? "light" : "dark"} theme` : "Switch colour theme"}
+      aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
     >
       <span aria-hidden="true">◐</span>
     </button>

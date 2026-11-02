@@ -55,6 +55,9 @@ export function AttractorCover() {
     let frame = 0;
     let previousTime = 0;
     let visible = true;
+    let colourA = "";
+    let colourB = "";
+    let headColour = "";
     let dragging: { id: number; x: number; y: number } | undefined;
 
     function draw() {
@@ -63,7 +66,7 @@ export function AttractorCover() {
       for (let start = 0; start < count - 1; start += 36) {
         const finish = Math.min(start + 36, count - 1);
         const midpoint = Math.floor((start + finish) / 2);
-        context!.strokeStyle = points[midpoint * 3] < 0 ? "#d8a383" : "#a4d8c9";
+        context!.strokeStyle = points[midpoint * 3] < 0 ? colourA : colourB;
         context!.globalAlpha = 0.23 + 0.5 * start / count;
         context!.beginPath();
         for (let index = start; index <= finish; index++) {
@@ -76,13 +79,10 @@ export function AttractorCover() {
 
       context!.globalAlpha = 1;
       const [x, y] = project(Math.floor(head) % count, width, height, yaw, tilt);
-      context!.fillStyle = "#f8edd6";
-      context!.shadowColor = "#f8edd6";
-      context!.shadowBlur = 8;
+      context!.fillStyle = headColour;
       context!.beginPath();
       context!.arc(x, y, 2, 0, Math.PI * 2);
       context!.fill();
-      context!.shadowBlur = 0;
     }
 
     function animate(time: number) {
@@ -105,6 +105,10 @@ export function AttractorCover() {
     }
 
     function resize() {
+      const colours = getComputedStyle(figure!);
+      colourA = colours.getPropertyValue("--plot-a").trim();
+      colourB = colours.getPropertyValue("--plot-b").trim();
+      headColour = colours.getPropertyValue("--ink").trim();
       const bounds = canvas!.getBoundingClientRect();
       width = bounds.width;
       height = bounds.height;
@@ -151,6 +155,8 @@ export function AttractorCover() {
 
     const sizes = new ResizeObserver(resize);
     sizes.observe(canvas);
+    const themes = new MutationObserver(resize);
+    themes.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
     const visibility = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
       syncAnimation();
@@ -173,6 +179,7 @@ export function AttractorCover() {
     return () => {
       window.cancelAnimationFrame(frame);
       sizes.disconnect();
+      themes.disconnect();
       visibility.disconnect();
       canvas.removeEventListener("pointerdown", onPointerDown);
       canvas.removeEventListener("pointermove", onPointerMove);
@@ -189,10 +196,9 @@ export function AttractorCover() {
   return (
     <figure className={styles.figure} ref={figureRef}>
       <div className={styles.stage}>
-        <span className={styles.figureNumber} aria-hidden="true">Fig. 01</span>
         <span className={styles.parameters} aria-hidden="true">σ 10 · ρ 28 · β 8/3</span>
         <svg className={styles.preview} viewBox="0 0 400 300" aria-hidden="true">
-          {preview.map((path, index) => <path key={index} d={path} stroke={index === 0 ? "#d8a383" : "#a4d8c9"} />)}
+          {preview.map((path, index) => <path key={index} d={path} stroke={index === 0 ? "var(--plot-a)" : "var(--plot-b)"} />)}
         </svg>
         <canvas
           ref={canvasRef}
@@ -201,10 +207,9 @@ export function AttractorCover() {
           aria-label="Lorenz attractor. Drag or use the arrow keys to rotate. Press Home to reset the view."
         />
         <span className={styles.dragHint} aria-hidden="true">Drag to rotate</span>
-        <span className={styles.axes} aria-hidden="true">x / y / z</span>
       </div>
       <figcaption>
-        <span><i aria-hidden="true" />Lorenz attractor</span>
+        <span>Lorenz attractor</span>
         <button
           type="button"
           aria-label={playing ? "Pause attractor animation" : "Play attractor animation"}

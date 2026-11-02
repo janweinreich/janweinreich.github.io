@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
+import { runInNewContext } from "node:vm";
 
 const templateRoot = new URL("../", import.meta.url);
 
@@ -50,6 +51,38 @@ test("renders the approved identity and navigation", async () => {
   }
   assert.match(html, /aria-label="Filter writing by subject"/);
   assert.match(html, /Lorenz attractor/);
+});
+
+test("starts in white and restores only an explicitly saved dark theme", async () => {
+  const html = await (await render()).text();
+  assert.match(html, /<html[^>]*data-theme="light"/);
+  assert.match(html, /name="theme-color" content="#ffffff"/);
+  assert.match(html, /aria-label="Switch to dark theme"/);
+  const script = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)]
+    .map(([, body]) => body)
+    .find((body) => body.includes("localStorage.getItem(\"blog-theme\")"));
+  assert.ok(script, "The saved-theme initializer is included in the rendered page");
+
+  for (const saved of [null, "light", "dark", "invalid", "unavailable"]) {
+    const root = { dataset: { theme: "light" } };
+    let browserColour = "#ffffff";
+    runInNewContext(script, {
+      document: {
+        documentElement: root,
+        querySelector: () => ({ setAttribute: (_name, value) => { browserColour = value; } }),
+      },
+      localStorage: { getItem: () => {
+        if (saved === "unavailable") throw new Error("Storage disabled");
+        return saved;
+      } },
+      window: { matchMedia: () => { throw new Error("System preferences must not choose the theme"); } },
+    });
+    assert.equal(root.dataset.theme, saved === "dark" ? "dark" : "light", String(saved));
+    assert.equal(browserColour, saved === "dark" ? "#101418" : "#ffffff", String(saved));
+  }
+
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.doesNotMatch(css, /@media\s*\(prefers-color-scheme:\s*dark\)/);
 });
 
 test("renders the first article, writing index, and empty about page", async () => {

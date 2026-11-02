@@ -93,8 +93,8 @@ const manifest = `${JSON.stringify(
     description: site.description,
     start_url: "/",
     display: "standalone",
-    background_color: "#fbfcfa",
-    theme_color: "#1a776a",
+    background_color: "#ffffff",
+    theme_color: "#ffffff",
     icons: [
       {
         src: "/favicon.png",

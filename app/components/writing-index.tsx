@@ -47,7 +47,6 @@ export function WritingIndex({ posts, subjects }: { posts: IndexPost[]; subjects
     <section className={styles.writing} id="writing" aria-labelledby="writing-title">
       <header className={styles.writingHeading}>
         <div className={styles.sectionTitle}>
-          <span className={styles.sectionNumber} aria-hidden="true">01 /</span>
           <h2 id="writing-title">Writing</h2>
           <span className={styles.articleCount} role="status">{visible.length} articles</span>
         </div>

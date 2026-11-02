@@ -23,7 +23,7 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.5rem;
+  gap: 2.75rem;
   margin: 1.5rem 0 0;
   padding: 0;
   list-style: none;
@@ -36,46 +36,30 @@
   height: 100%;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid var(--line-strong);
-  border-radius: 0.2rem;
-  background: var(--paper-raised);
+  border-bottom: 1px solid var(--line);
   transition: border-color 180ms ease;
 }
 
 .card:is(:hover, :focus-visible) { border-color: var(--accent); }
 
-.illustration {
-  overflow: hidden;
-  border-bottom: 1px solid var(--line);
-}
-
-.illustration svg {
-  display: block;
-  width: 100%;
-  height: 10.75rem;
-}
-
-.cosmos { background: #111c2b; }
-.mars { background: #271c1b; }
-
 .copy {
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 1.4rem 1.5rem;
+  padding: 0.5rem 0 1.5rem;
 }
 
 .kind {
   color: var(--accent);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
 }
 
 .copy h3 {
   margin: 0.6rem 0 0;
-  font-size: 1.6rem;
+  font-family: var(--font-display);
+  font-size: 2rem;
   font-weight: 500;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.025em;
   line-height: 1.2;
 }
 
@@ -83,7 +67,7 @@
   max-width: 48ch;
   margin: 0.75rem 0 1.25rem;
   color: var(--muted);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   line-height: 1.7;
 }
 
@@ -104,6 +88,5 @@
 @media (max-width: 640px) {
   .section { padding-top: 1.75rem; margin-top: 2rem; }
   .grid { grid-template-columns: 1fr; gap: 1.25rem; }
-  .copy { padding: 1.25rem; }
-  .illustration svg { height: 9rem; }
+  .copy { padding: 0.5rem 0 1.25rem; }
 }
