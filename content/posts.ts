@@ -3,12 +3,20 @@
 import { createElement, type ComponentType } from "react";
 import { RepublicationBody } from "@/app/components/republication-body";
 
+export type PostImage = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+};
+
 export type PostMetadata = {
   title: string;
   summary: string;
   published: string;
   updated?: string;
   tags: readonly string[];
+  image?: PostImage;
   draft?: boolean;
   source?: {
     name: string;

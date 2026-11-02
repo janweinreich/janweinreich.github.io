@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PageFrame } from "@/app/components/page-frame";
 import { getPost, publishedPosts } from "@/content/posts";
+import { SITE_URL } from "@/content/site-config";
 
 type ArticlePageProps = {
   params: Promise<{ slug: string }>;
@@ -23,6 +24,14 @@ export async function generateMetadata({
     return {};
   }
 
+  const image = post.metadata.image;
+  const socialImage = image ? {
+    url: new URL(image.src, SITE_URL).toString(),
+    width: image.width,
+    height: image.height,
+    alt: image.alt,
+  } : undefined;
+
   return {
     title: post.metadata.title,
     description: post.metadata.summary,
@@ -37,7 +46,16 @@ export async function generateMetadata({
       modifiedTime: post.metadata.updated,
       tags: [...post.metadata.tags],
       url: `/writing/${post.slug}/`,
+      ...(socialImage ? { images: [socialImage] } : {}),
     },
+    ...(socialImage ? {
+      twitter: {
+        card: "summary_large_image",
+        title: post.metadata.title,
+        description: post.metadata.summary,
+        images: [{ url: socialImage.url, alt: socialImage.alt }],
+      },
+    } : {}),
   };
 }
 

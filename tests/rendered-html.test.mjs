@@ -110,6 +110,39 @@ test("builds static discovery files", async () => {
   await access(new URL("../dist/client/writing/chembricks-after-ebolathon-bdbv-gp-screen.html", import.meta.url));
 });
 
+test("publishes What Is Left with its illustration and homepage feature", async () => {
+  const [home, article, archive] = await Promise.all([
+    render(),
+    render("/writing/what-is-left"),
+    render("/writing"),
+  ]);
+  assert.equal(article.status, 200);
+  const [homeHtml, articleHtml, archiveHtml] = await Promise.all([
+    home.text(), article.text(), archive.text(),
+  ]);
+  const articles = homeHtml.match(/<ol[^>]*id="home-articles"[^>]*>([\s\S]*?)<\/ol>/)?.[1];
+  assert.ok(articles);
+  assert.equal(articles.match(/href="([^\"]+)"/)?.[1], "/writing/what-is-left/");
+  assert.match(articles, /Latest article/);
+  assert.match(articles, /src="\/writing\/what-is-left\/room-to-explore\.jpg"/);
+  assert.match(archiveHtml, /href="\/writing\/what-is-left\/"/);
+  assert.match(articleHtml, /<h1>What Is Left\?<\/h1>/);
+  assert.match(articleHtml, /dateTime="2026-11-02"/i);
+  assert.match(articleHtml, /<figure class="article-illustration">/);
+  assert.match(articleHtml, /alt="Two researchers face a branching landscape of ideas/);
+  assert.match(articleHtml, /Illustration generated with AI\./);
+  assert.match(articleHtml, /the freedom to follow one through depend more heavily on what we can afford/);
+  assert.match(articleHtml, /property="og:image" content="https:\/\/janweinreich\.github\.io\/writing\/what-is-left\/room-to-explore\.jpg"/);
+  assert.match(articleHtml, /rel="canonical" href="https:\/\/janweinreich\.github\.io\/writing\/what-is-left\/"/);
+
+  const exported = await readFile(new URL("../dist/client/writing/what-is-left/index.html", import.meta.url), "utf8");
+  assert.match(exported, /<h1>What Is Left\?<\/h1>/);
+  const image = await readFile(new URL("../dist/client/writing/what-is-left/room-to-explore.jpg", import.meta.url));
+  assert.equal(image.subarray(0, 3).toString("hex"), "ffd8ff");
+  const sitemap = await readFile(new URL("../dist/client/sitemap.xml", import.meta.url), "utf8");
+  assert.match(sitemap, /https:\/\/janweinreich\.github\.io\/writing\/what-is-left\//);
+});
+
 test("removes disposable starter code", async () => {
   const packageJson = await readFile(
     new URL("../package.json", import.meta.url),

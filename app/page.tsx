@@ -21,6 +21,7 @@ export default function Home() {
     title: post.metadata.title,
     summary: post.metadata.summary,
     published: post.metadata.published,
+    image: post.metadata.image,
     tags: [...post.metadata.tags],
     source: post.metadata.source?.name,
     subject: shelfId(post.metadata.tags),

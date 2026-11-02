@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { PostImage } from "@/content/posts";
 import styles from "../home.module.css";
 
 type IndexPost = {
@@ -11,6 +12,7 @@ type IndexPost = {
   tags: string[];
   source?: string;
   subject: string;
+  image?: PostImage;
 };
 
 type Subject = { id: string; label: string; count: number };
@@ -35,7 +37,10 @@ function Arrow() {
 export function WritingIndex({ posts, subjects }: { posts: IndexPost[]; subjects: Subject[] }) {
   const [subject, setSubject] = useState("all");
   const visible = subject === "all" ? posts : posts.filter((post) => post.subject === subject);
-  const featuredSlug = posts[0]?.slug === "ten-angstroms-of-a-cysteine" ? posts[0].slug : undefined;
+  const latestPost = posts[0];
+  const featuredSlug = latestPost && (latestPost.image || latestPost.slug === "ten-angstroms-of-a-cysteine")
+    ? latestPost.slug
+    : undefined;
   const hasFeature = visible.some((post) => post.slug === featuredSlug);
 
   return (
@@ -86,14 +91,24 @@ export function WritingIndex({ posts, subjects }: { posts: IndexPost[]; subjects
                       <span className={styles.readLink}>Read article <Arrow /></span>
                     </div>
                   </div>
-                  {featured && (
+                  {featured && post.image ? (
+                    <div className={styles.coverVisual} aria-hidden="true">
+                      <img
+                        src={post.image.src}
+                        alt=""
+                        width={post.image.width}
+                        height={post.image.height}
+                        decoding="async"
+                      />
+                    </div>
+                  ) : featured ? (
                     <div className={styles.featureVisual} aria-hidden="true">
                       <span className={styles.measure}>10<span>Å</span></span>
                       <span className={styles.measureRing} />
                       <img src="/writing/cysteine-pocket/dashboard.png" alt="" width={1280} height={800} decoding="async" />
                       <span className={styles.visualLabel}>Cysteine pocket explorer</span>
                     </div>
-                  )}
+                  ) : null}
                 </a>
               </article>
             </li>
