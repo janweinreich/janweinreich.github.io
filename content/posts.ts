@@ -5,6 +5,7 @@ import { RepublicationBody } from "@/app/components/republication-body";
 
 export type PostImage = {
   src: string;
+  srcSet?: string;
   alt: string;
   width: number;
   height: number;

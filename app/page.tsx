@@ -33,16 +33,11 @@ export default function Home() {
         <section className={styles.intro} aria-labelledby="home-title">
           <div className={styles.introCopy}>
             <h1 id="home-title" aria-label={SITE_DESCRIPTION}>
-              <span className={styles.titleLead}>Notes on</span>{" "}
-              <span className={styles.titleLine}>biology, chemistry,</span>{" "}
-              <span className={styles.titleLine}>physics, and</span>{" "}
+              Notes on biology, chemistry, physics, and{" "}
               <em>other things.</em>
             </h1>
             <div className={styles.introActions}>
-              <a className={styles.exploreLink} href="#writing">
-                Writing <span aria-hidden="true">↓</span>
-              </a>
-              <a className={`${styles.exploreLink} ${styles.projectJump}`} href="#fun-projects">
+              <a className={styles.exploreLink} href="#fun-projects">
                 Fun projects <span aria-hidden="true">↘</span>
               </a>
             </div>
@@ -50,29 +45,31 @@ export default function Home() {
           <AttractorCover />
         </section>
 
-        <WritingIndex
-          posts={posts}
-          subjects={groups.map(({ id, label, posts: items }) => ({ id, label, count: items.length }))}
-        />
+        <div className={styles.content}>
+          <WritingIndex
+            posts={posts}
+            subjects={groups.map(({ id, label, posts: items }) => ({ id, label, count: items.length }))}
+          />
 
-        <FunProjects />
+          <aside className={styles.sidebar} aria-label="Projects and company writing">
+            <FunProjects />
 
-        <section className={styles.company} aria-labelledby="company-writing-title">
-          <div>
-            <h2 id="company-writing-title">Writing for ChemBricks</h2>
-          </div>
-          <div className={styles.companyCopy}>
-            <p>
-              I write the <a href="https://chembricks.ai/blog/">ChemBricks blog</a>,
-              covering our work on AI for chemistry, molecular models, benchmarking,
-              and physics-based validation. Those articles are republished here with
-              their original dates and links to the originals.
-            </p>
-            <a className={styles.companyLink} href="https://chembricks.ai/blog/">
-              ChemBricks blog <span aria-hidden="true">↗</span>
-            </a>
-          </div>
-        </section>
+            <section className={styles.company} aria-labelledby="company-writing-title">
+              <h2 id="company-writing-title">Writing for ChemBricks</h2>
+              <div className={styles.companyCopy}>
+                <p>
+                  I write the <a href="https://chembricks.ai/blog/">ChemBricks blog</a>,
+                  covering our work on AI for chemistry, molecular models, benchmarking,
+                  and physics-based validation. Those articles are republished here with
+                  their original dates and links to the originals.
+                </p>
+                <a className={styles.companyLink} href="https://chembricks.ai/blog/">
+                  ChemBricks blog <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </section>
+          </aside>
+        </div>
       </div>
     </PageFrame>
   );

@@ -37,11 +37,7 @@ function Arrow() {
 export function WritingIndex({ posts, subjects }: { posts: IndexPost[]; subjects: Subject[] }) {
   const [subject, setSubject] = useState("all");
   const visible = subject === "all" ? posts : posts.filter((post) => post.subject === subject);
-  const latestPost = posts[0];
-  const featuredSlug = latestPost && (latestPost.image || latestPost.slug === "ten-angstroms-of-a-cysteine")
-    ? latestPost.slug
-    : undefined;
-  const hasFeature = visible.some((post) => post.slug === featuredSlug);
+  const featuredSlug = posts[0]?.slug;
 
   return (
     <section className={styles.writing} id="writing" aria-labelledby="writing-title">
@@ -67,47 +63,42 @@ export function WritingIndex({ posts, subjects }: { posts: IndexPost[]; subjects
         ))}
       </div>
 
-      <ol className={styles.articles} id="home-articles" data-has-feature={hasFeature}>
+      <ol className={styles.articles} id="home-articles">
         {visible.map((post) => {
           const featured = post.slug === featuredSlug;
 
           return (
             <li className={featured ? styles.featuredEntry : styles.entry} key={post.slug}>
-              <article className={featured ? styles.featured : styles.article}>
+              <article className={featured ? styles.featured : undefined}>
                 <a className={styles.articleLink} href={`/writing/${post.slug}/`}>
                   <div className={styles.articleCopy}>
                     <div className={styles.articleMeta}>
                       <span className={styles.topic} data-subject={post.subject}>
-                        <span aria-hidden="true" />
                         {featured ? "Latest article" : subjects.find((item) => item.id === post.subject)?.label}
                       </span>
                       <time dateTime={post.published}>{formatDate(post.published)}</time>
                     </div>
                     <h3>{post.title}</h3>
                     <p className={styles.summary}>{post.summary}</p>
-                    <div className={styles.articleFoot}>
-                      <span>{post.source ? `Republished from ${post.source}` : post.tags.join(" / ")}</span>
-                      <span className={styles.readLink}>Read article <Arrow /></span>
-                    </div>
                   </div>
-                  {featured && post.image ? (
+                  {featured && post.image && (
                     <div className={styles.coverVisual} aria-hidden="true">
                       <img
                         src={post.image.src}
                         alt=""
                         width={post.image.width}
                         height={post.image.height}
+                        srcSet={post.image.srcSet}
+                        sizes="(max-width: 800px) calc(100vw - 40px), (max-width: 960px) calc(100vw - 340px), (max-width: 1104px) calc(100vw - 400px), 704px"
+                        fetchPriority="high"
                         decoding="async"
                       />
                     </div>
-                  ) : featured ? (
-                    <div className={styles.featureVisual} aria-hidden="true">
-                      <span className={styles.measure}>10<span>Å</span></span>
-                      <span className={styles.measureRing} />
-                      <img src="/writing/cysteine-pocket/dashboard.png" alt="" width={1280} height={800} decoding="async" />
-                      <span className={styles.visualLabel}>Cysteine pocket explorer</span>
-                    </div>
-                  ) : null}
+                  )}
+                  <div className={styles.articleFoot}>
+                    <span>{post.source ? `Republished from ${post.source}` : post.tags.join(" / ")}</span>
+                    <span className={styles.readLink}>Read article <Arrow /></span>
+                  </div>
                 </a>
               </article>
             </li>

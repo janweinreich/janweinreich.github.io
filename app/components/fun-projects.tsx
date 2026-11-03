@@ -1,14 +1,11 @@
 import { FUN_PROJECTS } from "@/content/projects";
-import home from "../home.module.css";
 import styles from "./fun-projects.module.css";
 
 export function FunProjects() {
   return (
     <section className={styles.section} id="fun-projects" aria-labelledby="fun-projects-title">
       <header className={styles.heading}>
-        <div className={home.sectionTitle}>
-          <h2 id="fun-projects-title">Fun projects</h2>
-        </div>
+        <h2 id="fun-projects-title">Fun projects</h2>
         <p>A couple of things I vibe-coded for fun.</p>
       </header>
       <ul className={styles.grid}>

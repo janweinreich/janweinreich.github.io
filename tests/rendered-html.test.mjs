@@ -158,6 +158,7 @@ test("publishes What Is Left with its illustration and homepage feature", async 
   assert.equal(articles.match(/href="([^\"]+)"/)?.[1], "/writing/what-is-left/");
   assert.match(articles, /Latest article/);
   assert.match(articles, /src="\/writing\/what-is-left\/room-to-explore\.jpg"/);
+  assert.match(articles, /srcSet="[^\"]*room-to-explore-768\.jpg 768w/);
   assert.match(archiveHtml, /href="\/writing\/what-is-left\/"/);
   assert.match(articleHtml, /<h1>What Is Left\?<\/h1>/);
   assert.match(articleHtml, /dateTime="2026-11-02"/i);
@@ -172,6 +173,7 @@ test("publishes What Is Left with its illustration and homepage feature", async 
   assert.match(exported, /<h1>What Is Left\?<\/h1>/);
   const image = await readFile(new URL("../dist/client/writing/what-is-left/room-to-explore.jpg", import.meta.url));
   assert.equal(image.subarray(0, 3).toString("hex"), "ffd8ff");
+  await access(new URL("../dist/client/writing/what-is-left/room-to-explore-768.jpg", import.meta.url));
   const sitemap = await readFile(new URL("../dist/client/sitemap.xml", import.meta.url), "utf8");
   assert.match(sitemap, /https:\/\/janweinreich\.github\.io\/writing\/what-is-left\//);
 });

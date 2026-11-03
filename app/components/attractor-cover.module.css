@@ -6,7 +6,7 @@
 
 .stage {
   position: relative;
-  height: 18.5rem;
+  height: 10rem;
   background: var(--paper);
 }
 
@@ -36,8 +36,8 @@
   line-height: 1.5;
   pointer-events: none;
 }
-.parameters { top: 1.25rem; right: 1.5rem; }
-.dragHint { bottom: 1rem; left: 1.5rem; opacity: 0; transition: opacity 180ms ease; }
+.parameters { top: 0.25rem; right: 0; }
+.dragHint { bottom: 0.5rem; left: 0; opacity: 0; transition: opacity 180ms ease; }
 .figure:is(:hover, :focus-within) .dragHint { opacity: 1; }
 
 .figure figcaption {
@@ -68,9 +68,10 @@
 }
 .figure button:focus-visible { outline-offset: -3px; }
 
-@media (max-width: 900px) { .stage { height: 17rem; } }
-@media (max-width: 640px) {
-  .stage { height: 11rem; }
-  .parameters { top: 1rem; }
-  .dragHint { opacity: 1; }
+@media (max-width: 800px) {
+  .stage { height: 8.5rem; }
+  .parameters { display: none; }
+  .figure figcaption { flex-wrap: wrap; gap: 0; font-size: 0.65rem; padding-top: 0.4rem; }
+  .figure figcaption > span { width: 100%; }
+  .figure button { justify-content: flex-start; }
 }

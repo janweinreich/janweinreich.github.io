@@ -4,6 +4,7 @@
 - Method: built-in image generation
 - Asset: `public/writing/what-is-left/room-to-explore.jpg`
 - Dimensions: 1536 × 1024
+- Responsive homepage variant: `public/writing/what-is-left/room-to-explore-768.jpg`, 768 × 512
 - Use: article figure, homepage card, and article sharing image
 - Caption: Different budgets, different room to explore. Illustration generated with AI.
 - Alt text: Two researchers face a branching landscape of ideas. One can explore a few illuminated paths, while the other can explore many.
