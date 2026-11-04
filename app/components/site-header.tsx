@@ -2,6 +2,7 @@ import { ThemeToggle } from "./theme-toggle";
 
 const navigation = [
   { label: "Writing", href: "/writing/" },
+  { label: "Games", ariaLabel: "Games and experiments", href: "/#fun-projects" },
   {
     label: "GitHub",
     href: "https://github.com/janweinreich",
@@ -37,7 +38,7 @@ export function SiteHeader() {
                   </span>
                 </a>
               ) : (
-                <a href={item.href}>{item.label}</a>
+                <a href={item.href} aria-label={"ariaLabel" in item ? item.ariaLabel : undefined}>{item.label}</a>
               )}
             </li>
           ))}

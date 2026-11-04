@@ -156,9 +156,13 @@ test("publishes What Is Left with its illustration and homepage feature", async 
   const articles = homeHtml.match(/<ol[^>]*id="home-articles"[^>]*>([\s\S]*?)<\/ol>/)?.[1];
   assert.ok(articles);
   assert.equal(articles.match(/href="([^\"]+)"/)?.[1], "/writing/what-is-left/");
-  assert.match(articles, /Latest article/);
-  assert.match(articles, /src="\/writing\/what-is-left\/room-to-explore\.jpg"/);
-  assert.match(articles, /srcSet="[^\"]*room-to-explore-768\.jpg 768w/);
+  const feature = homeHtml.match(/<section\b[^>]*id="latest-article"[^>]*>([\s\S]*?)<\/section>/)?.[1];
+  assert.ok(feature, "The latest article has a standalone feature");
+  assert.match(feature, /Latest article/);
+  assert.match(feature, /href="\/writing\/what-is-left\/"/);
+  assert.match(feature, /<h2[^>]*id="latest-article-title"[^>]*>What Is Left\?<\/h2>/);
+  assert.match(feature, /src="\/writing\/what-is-left\/room-to-explore\.jpg"/);
+  assert.match(feature, /srcSet="[^\"]*room-to-explore-768\.jpg 768w/);
   assert.match(archiveHtml, /href="\/writing\/what-is-left\/"/);
   assert.match(articleHtml, /<h1>What Is Left\?<\/h1>/);
   assert.match(articleHtml, /dateTime="2026-11-02"/i);
@@ -176,6 +180,39 @@ test("publishes What Is Left with its illustration and homepage feature", async 
   await access(new URL("../dist/client/writing/what-is-left/room-to-explore-768.jpg", import.meta.url));
   const sitemap = await readFile(new URL("../dist/client/sitemap.xml", import.meta.url), "utf8");
   assert.match(sitemap, /https:\/\/janweinreich\.github\.io\/writing\/what-is-left\//);
+});
+
+test("puts the latest article and games before the complete writing archive", async () => {
+  const [homeResponse, archiveResponse] = await Promise.all([render(), render("/writing")]);
+  assert.equal(homeResponse.status, 200);
+  assert.equal(archiveResponse.status, 200);
+  const [home, archive] = await Promise.all([homeResponse.text(), archiveResponse.text()]);
+
+  const positions = ["latest-article", "fun-projects", "writing"].map((id) => home.indexOf(`id="${id}"`));
+  assert.ok(positions.every((position) => position >= 0), "All three homepage sections exist");
+  assert.ok(positions[0] < positions[1] && positions[1] < positions[2], "Discovery order is latest article, games, then archive");
+
+  const navigation = home.match(/<nav\b[^>]*aria-label="Primary navigation"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
+  assert.ok(navigation);
+  assert.match(navigation, /<a\b[^>]*href="\/#fun-projects"[^>]*>\s*Games\s*<\/a>/);
+  const games = home.match(/<section\b[^>]*id="fun-projects"[^>]*>([\s\S]*?)<\/section>/)?.[1];
+  assert.ok(games);
+  for (const project of [
+    { url: "https://uni-versum.netlify.app/", image: "/projects/decascope.webp" },
+    { url: "https://dibs-on-mars.vercel.app/", image: "/projects/dibs-on-mars.webp" },
+  ]) {
+    assert.ok(games.includes(`href="${project.url}"`), project.url);
+    assert.ok(games.includes(`src="${project.image}"`), project.image);
+    await access(new URL(`../dist/client${project.image}`, import.meta.url));
+  }
+
+  const articles = home.match(/<ol[^>]*id="home-articles"[^>]*>([\s\S]*?)<\/ol>/)?.[1];
+  assert.ok(articles);
+  const articleLinks = (html) => new Set([...html.matchAll(/href="(\/writing\/[^/"?#]+\/)"/g)].map(([, href]) => href));
+  const expected = articleLinks(archive);
+  assert.ok(expected.size >= 11, "The archive retains all eleven existing articles and allows future additions");
+  assert.deepEqual(articleLinks(articles), expected, "Every article in the archive is also linked from the homepage");
+  assert.doesNotMatch(articles, /\shidden[\s=>]/);
 });
 
 test("removes disposable starter code", async () => {

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import type { PostImage } from "@/content/posts";
 import styles from "../home.module.css";
 
 type IndexPost = {
@@ -12,7 +11,6 @@ type IndexPost = {
   tags: string[];
   source?: string;
   subject: string;
-  image?: PostImage;
 };
 
 type Subject = { id: string; label: string; count: number };
@@ -37,14 +35,13 @@ function Arrow() {
 export function WritingIndex({ posts, subjects }: { posts: IndexPost[]; subjects: Subject[] }) {
   const [subject, setSubject] = useState("all");
   const visible = subject === "all" ? posts : posts.filter((post) => post.subject === subject);
-  const featuredSlug = posts[0]?.slug;
 
   return (
     <section className={styles.writing} id="writing" aria-labelledby="writing-title">
       <header className={styles.writingHeading}>
         <div className={styles.sectionTitle}>
           <h2 id="writing-title">Writing</h2>
-          <span className={styles.articleCount} role="status">{visible.length} articles</span>
+          <span className={styles.articleCount} role="status">{visible.length} {visible.length === 1 ? "article" : "articles"}</span>
         </div>
         <a className={styles.archiveLink} href="/writing/">All writing <span aria-hidden="true">↗</span></a>
       </header>
@@ -65,36 +62,20 @@ export function WritingIndex({ posts, subjects }: { posts: IndexPost[]; subjects
 
       <ol className={styles.articles} id="home-articles">
         {visible.map((post) => {
-          const featured = post.slug === featuredSlug;
-
           return (
-            <li className={featured ? styles.featuredEntry : styles.entry} key={post.slug}>
-              <article className={featured ? styles.featured : undefined}>
+            <li className={styles.entry} key={post.slug}>
+              <article>
                 <a className={styles.articleLink} href={`/writing/${post.slug}/`}>
                   <div className={styles.articleCopy}>
                     <div className={styles.articleMeta}>
                       <span className={styles.topic} data-subject={post.subject}>
-                        {featured ? "Latest article" : subjects.find((item) => item.id === post.subject)?.label}
+                        {subjects.find((item) => item.id === post.subject)?.label}
                       </span>
                       <time dateTime={post.published}>{formatDate(post.published)}</time>
                     </div>
                     <h3>{post.title}</h3>
                     <p className={styles.summary}>{post.summary}</p>
                   </div>
-                  {featured && post.image && (
-                    <div className={styles.coverVisual} aria-hidden="true">
-                      <img
-                        src={post.image.src}
-                        alt=""
-                        width={post.image.width}
-                        height={post.image.height}
-                        srcSet={post.image.srcSet}
-                        sizes="(max-width: 800px) calc(100vw - 40px), (max-width: 960px) calc(100vw - 340px), (max-width: 1104px) calc(100vw - 400px), 704px"
-                        fetchPriority="high"
-                        decoding="async"
-                      />
-                    </div>
-                  )}
                   <div className={styles.articleFoot}>
                     <span>{post.source ? `Republished from ${post.source}` : post.tags.join(" / ")}</span>
                     <span className={styles.readLink}>Read article <Arrow /></span>

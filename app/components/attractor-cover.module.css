@@ -69,9 +69,7 @@
 .figure button:focus-visible { outline-offset: -3px; }
 
 @media (max-width: 800px) {
-  .stage { height: 8.5rem; }
+  .stage { height: 5rem; }
   .parameters { display: none; }
-  .figure figcaption { flex-wrap: wrap; gap: 0; font-size: 0.65rem; padding-top: 0.4rem; }
-  .figure figcaption > span { width: 100%; }
-  .figure button { justify-content: flex-start; }
+  .figure figcaption { font-size: 0.7rem; }
 }

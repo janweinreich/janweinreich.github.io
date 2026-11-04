@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PageFrame } from "./components/page-frame";
 import { AttractorCover } from "./components/attractor-cover";
+import { FeaturedPost } from "./components/featured-post";
 import { WritingIndex } from "./components/writing-index";
 import { FunProjects } from "./components/fun-projects";
 import { SITE_DESCRIPTION } from "@/content/site-config";
@@ -21,7 +22,6 @@ export default function Home() {
     title: post.metadata.title,
     summary: post.metadata.summary,
     published: post.metadata.published,
-    image: post.metadata.image,
     tags: [...post.metadata.tags],
     source: post.metadata.source?.name,
     subject: shelfId(post.metadata.tags),
@@ -37,13 +37,20 @@ export default function Home() {
               <em>other things.</em>
             </h1>
             <div className={styles.introActions}>
+              <a className={styles.exploreLink} href="#latest-article">
+                Read the latest <span aria-hidden="true">↓</span>
+              </a>
               <a className={styles.exploreLink} href="#fun-projects">
-                Fun projects <span aria-hidden="true">↘</span>
+                Games &amp; experiments <span aria-hidden="true">↘</span>
               </a>
             </div>
           </div>
           <AttractorCover />
         </section>
+
+        <FeaturedPost post={publishedPosts[0]} />
+
+        <FunProjects />
 
         <div className={styles.content}>
           <WritingIndex
@@ -51,9 +58,7 @@ export default function Home() {
             subjects={groups.map(({ id, label, posts: items }) => ({ id, label, count: items.length }))}
           />
 
-          <aside className={styles.sidebar} aria-label="Projects and company writing">
-            <FunProjects />
-
+          <aside className={styles.sidebar} aria-label="Company writing">
             <section className={styles.company} aria-labelledby="company-writing-title">
               <h2 id="company-writing-title">Writing for ChemBricks</h2>
               <div className={styles.companyCopy}>
