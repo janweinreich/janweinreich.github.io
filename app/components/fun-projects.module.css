@@ -37,7 +37,7 @@
   height: 100%;
   flex-direction: column;
   border-bottom: 1px solid var(--line-strong);
-  transition: border-color 180ms ease;
+  transition: border-color 180ms ease, transform 280ms ease;
 }
 .preview { overflow: hidden; border-radius: 0.25rem; background: #101418; }
 .preview img { display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: cover; }
@@ -90,6 +90,9 @@
 .action > span { transition: transform 180ms ease; }
 .card:is(:hover, :focus-visible) .action > span { transform: translate(2px, -2px); }
 .card:is(:hover, :focus-visible) .action::after { transform: scaleX(1); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .card:hover { transform: translateY(-3px); }
+}
 @media (max-width: 800px) {
   .section { scroll-margin-top: 1.5rem; }
 }

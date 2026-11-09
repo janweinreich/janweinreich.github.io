@@ -12,7 +12,7 @@ export function FunProjects() {
         {FUN_PROJECTS.map((project, index) => (
           <li key={project.id} data-scroll-reveal data-scroll-delay={index * 90}>
             <a className={styles.card} href={project.url} target="_blank" rel="noopener noreferrer">
-              <div className={styles.preview} aria-hidden="true" data-scroll-image>
+              <div className={styles.preview} aria-hidden="true">
                 <img src={`/projects/${project.id}.webp`} alt="" width={1200} height={750} loading="lazy" decoding="async" />
               </div>
               <div className={styles.copy}>
