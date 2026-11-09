@@ -38,7 +38,7 @@ export function WritingIndex({ posts, subjects }: { posts: IndexPost[]; subjects
 
   return (
     <section className={styles.writing} id="writing" aria-labelledby="writing-title">
-      <header className={styles.writingHeading}>
+      <header className={styles.writingHeading} data-scroll-reveal>
         <div className={styles.sectionTitle}>
           <h2 id="writing-title">Writing</h2>
           <span className={styles.articleCount} role="status">{visible.length} {visible.length === 1 ? "article" : "articles"}</span>
@@ -63,7 +63,7 @@ export function WritingIndex({ posts, subjects }: { posts: IndexPost[]; subjects
       <ol className={styles.articles} id="home-articles">
         {visible.map((post) => {
           return (
-            <li className={styles.entry} key={post.slug}>
+            <li className={styles.entry} key={post.slug} data-scroll-reveal>
               <article>
                 <a className={styles.articleLink} href={`/writing/${post.slug}/`}>
                   <div className={styles.articleCopy}>

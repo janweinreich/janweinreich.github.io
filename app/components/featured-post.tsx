@@ -15,7 +15,7 @@ export function FeaturedPost({ post }: { post: PostRecord | undefined }) {
   return (
     <section className={styles.feature} id="latest-article" aria-labelledby="latest-article-title">
       <a className={styles.featureLink} href={`/writing/${post.slug}/`} data-has-image={Boolean(image)}>
-        <div className={styles.featureCopy}>
+        <div className={styles.featureCopy} data-scroll-reveal>
           <div className={styles.featureMeta}>
             <span>Latest article</span>
             <time dateTime={published}>{date}</time>
@@ -25,7 +25,7 @@ export function FeaturedPost({ post }: { post: PostRecord | undefined }) {
           <span className={styles.featureRead}>Read article <span aria-hidden="true">↗</span></span>
         </div>
         {image && (
-          <div className={styles.featureImage} aria-hidden="true">
+          <div className={styles.featureImage} aria-hidden="true" data-scroll-reveal data-scroll-image>
             <img
               src={image.src}
               srcSet={image.srcSet}

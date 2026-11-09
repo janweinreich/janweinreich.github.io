@@ -4,6 +4,7 @@ import { AttractorCover } from "./components/attractor-cover";
 import { FeaturedPost } from "./components/featured-post";
 import { WritingIndex } from "./components/writing-index";
 import { FunProjects } from "./components/fun-projects";
+import { HomeMotion } from "./components/home-motion";
 import { SITE_DESCRIPTION } from "@/content/site-config";
 import { groupPosts, shelfId } from "@/content/shelves";
 import { publishedPosts } from "@/content/posts";
@@ -29,7 +30,7 @@ export default function Home() {
 
   return (
     <PageFrame className={styles.frame}>
-      <div className={styles.home}>
+      <HomeMotion className={styles.home}>
         <section className={styles.intro} aria-labelledby="home-title">
           <div className={styles.introCopy}>
             <h1 id="home-title" aria-label={SITE_DESCRIPTION}>
@@ -59,7 +60,7 @@ export default function Home() {
           />
 
           <aside className={styles.sidebar} aria-label="Company writing">
-            <section className={styles.company} aria-labelledby="company-writing-title">
+            <section className={styles.company} aria-labelledby="company-writing-title" data-scroll-reveal>
               <h2 id="company-writing-title">Writing for ChemBricks</h2>
               <div className={styles.companyCopy}>
                 <p>
@@ -75,7 +76,7 @@ export default function Home() {
             </section>
           </aside>
         </div>
-      </div>
+      </HomeMotion>
     </PageFrame>
   );
 }
