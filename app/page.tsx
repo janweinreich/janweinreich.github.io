@@ -6,7 +6,7 @@ import { WritingIndex } from "./components/writing-index";
 import { FunProjects } from "./components/fun-projects";
 import { HomeMotion } from "./components/home-motion";
 import { SITE_DESCRIPTION } from "@/content/site-config";
-import { groupPosts, shelfId } from "@/content/shelves";
+import { groupPosts, secondaryTags, shelfId } from "@/content/shelves";
 import { publishedPosts } from "@/content/posts";
 import styles from "./home.module.css";
 
@@ -23,7 +23,7 @@ export default function Home() {
     title: post.metadata.title,
     summary: post.metadata.summary,
     published: post.metadata.published,
-    tags: [...post.metadata.tags],
+    tags: secondaryTags(post.metadata.tags),
     source: post.metadata.source?.name,
     subject: shelfId(post.metadata.tags),
   }));

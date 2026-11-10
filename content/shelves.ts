@@ -29,6 +29,12 @@ export function shelfId(tags: readonly string[]) {
   return SUBJECTS.find((name) => tags.includes(name))?.toLowerCase() ?? "elsewhere";
 }
 
+/** The tags that say more than the shelf an article already sits on. */
+export function secondaryTags(tags: readonly string[]) {
+  const shelf = shelfId(tags);
+  return tags.filter((tag) => tag !== "Other" && tag.toLowerCase() !== shelf);
+}
+
 export function groupPosts(posts: readonly PostRecord[]) {
   const grouped = new Map<string, PostRecord[]>(SHELVES.map((shelf) => [shelf.id, []]));
   for (const post of posts) {

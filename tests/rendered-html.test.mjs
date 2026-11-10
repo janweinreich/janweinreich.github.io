@@ -215,6 +215,30 @@ test("puts the latest article and games before the complete writing archive", as
   assert.doesNotMatch(articles, /\shidden[\s=>]/);
 });
 
+test("opens with a legible attractor, tidy article tags, and a current preview image", async () => {
+  const html = await (await render()).text();
+
+  const figure = html.match(/<figure\b[^>]*>([\s\S]*?)<\/figure>/)?.[1];
+  assert.ok(figure, "The opening figure is present in the initial HTML");
+  assert.match(figure, /<svg[^>]*aria-hidden="true"[^>]*><path d="M[\d.,L-]{2000,}"/, "The curve is drawn before JavaScript starts");
+  assert.match(figure, /Two paths that start less than a pixel apart\./);
+  assert.match(figure, /aria-label="Lorenz attractor, with two paths[^"]*Drag or use the arrow keys to rotate/);
+
+  const articles = html.match(/<ol[^>]*id="home-articles"[^>]*>([\s\S]*?)<\/ol>/)?.[1];
+  assert.ok(articles);
+  assert.doesNotMatch(articles, /<span>Other\b/, "The catch-all tag is not shown next to its own shelf");
+  const physics = articles.match(/<li\b(?:(?!<\/li>)[\s\S])*one-structure-three-languages[\s\S]*?<\/li>/)?.[0];
+  assert.ok(physics);
+  assert.equal(physics.match(/Physics/g)?.length, 1, "An article does not repeat the shelf it sits on");
+  assert.match(articles, /<span>Philosophy<\/span>/);
+
+  assert.match(html, /property="og:image" content="https:\/\/janweinreich\.github\.io\/og-v3\.png"/);
+  assert.match(html, /name="twitter:image" content="https:\/\/janweinreich\.github\.io\/og-v3\.png"/);
+  const preview = await readFile(new URL("../dist/client/og-v3.png", import.meta.url));
+  assert.equal(preview.subarray(1, 4).toString(), "PNG");
+  assert.deepEqual([preview.readUInt32BE(16), preview.readUInt32BE(20)], [1200, 630]);
+});
+
 test("removes disposable starter code", async () => {
   const packageJson = await readFile(
     new URL("../package.json", import.meta.url),

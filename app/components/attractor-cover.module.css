@@ -1,13 +1,12 @@
 .figure {
   min-width: 0;
   margin: 0;
-  overflow: hidden;
 }
 
 .stage {
   position: relative;
-  height: 10rem;
-  background: var(--paper);
+  height: 12.5rem;
+  overflow: hidden;
 }
 
 .stage canvas, .preview {
@@ -22,40 +21,45 @@
 .stage canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
 .figure[data-dragging="true"] canvas { cursor: grabbing; }
 .preview { pointer-events: none; }
-.preview path { fill: none; stroke-width: 0.8; opacity: 0.7; }
+.preview path { fill: none; stroke: var(--muted); stroke-width: 0.7; opacity: 0.35; vector-effect: non-scaling-stroke; }
 .figure[data-ready="true"] .preview { visibility: hidden; }
 .figure:not([data-ready="true"]) button { visibility: hidden; }
 
 .parameters, .dragHint {
   position: absolute;
+  bottom: 0.5rem;
   z-index: 1;
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.015em;
+  font-size: 0.68rem;
   line-height: 1.5;
   pointer-events: none;
 }
-.parameters { top: 0.25rem; right: 0; }
-.dragHint { bottom: 0.5rem; left: 0; opacity: 0; transition: opacity 180ms ease; }
+.parameters { left: 0; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.015em; }
+.dragHint { right: 0; opacity: 0; transition: opacity 180ms ease; }
 .figure:is(:hover, :focus-within) .dragHint { opacity: 1; }
+/* Keep both labels clear of the focus ring. */
+.stage canvas:focus-visible ~ .parameters { left: 0.6rem; }
+.stage canvas:focus-visible ~ .dragHint { right: 0.6rem; }
 
 .figure figcaption {
   display: flex;
   min-height: 2.75rem;
-  gap: 0.75rem;
+  gap: 1rem;
   align-items: center;
   justify-content: space-between;
   border-top: 1px solid var(--line);
   color: var(--muted);
   font-family: var(--font-sans);
   font-size: 0.75rem;
+  line-height: 1.45;
 }
-.figure figcaption > span { display: inline-flex; gap: 0.5rem; align-items: center; }
+.figure figcaption p { margin: 0; text-wrap: balance; }
+.figure figcaption p > span { color: var(--ink); }
 .figure button {
   display: flex;
   min-width: 3.75rem;
   min-height: 2.75rem;
+  flex: none;
   gap: 0.5rem;
   align-items: center;
   justify-content: center;
@@ -68,8 +72,12 @@
 }
 .figure button:focus-visible { outline-offset: -3px; }
 
-@media (max-width: 800px) {
-  .stage { height: 5rem; }
+/* In a narrower stage the curve reaches the corner the parameters sit in. */
+@media (max-width: 960px) {
   .parameters { display: none; }
+}
+
+@media (max-width: 800px) {
+  .stage { height: 9rem; }
   .figure figcaption { font-size: 0.7rem; }
 }

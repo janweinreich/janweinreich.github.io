@@ -1,37 +1,114 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { createLorenzPoints } from "@/app/lib/lorenz";
+import { createLorenzPoints, LORENZ_CENTRE, stepLorenz } from "@/app/lib/lorenz";
 import styles from "./attractor-cover.module.css";
 
 const points = createLorenzPoints(4800);
 const count = points.length / 3;
-const initialView = { yaw: 0.23, tilt: -0.12 };
 
-function project(index: number, width: number, height: number, yaw: number, tilt: number) {
-  const x = points[index * 3];
-  const y = points[index * 3 + 1];
-  const z = points[index * 3 + 2];
-  const across = x * Math.cos(yaw) - y * Math.sin(yaw);
-  const depth = x * Math.sin(yaw) + y * Math.cos(yaw);
-  const vertical = z * Math.cos(tilt) - depth * Math.sin(tilt);
-  const perspective = 180 / (180 + depth * Math.cos(tilt) + z * Math.sin(tilt));
-  const scale = Math.min(width / 55, height / 53) * 0.9;
-  return [width / 2 + across * scale * perspective, height * 0.54 - vertical * scale * perspective];
+// Seen across the wings rather than along them, so the curve reads as the familiar butterfly.
+const initialView = { yaw: -0.62, tilt: 0.06 };
+const SWAY = 0.2; // radians the view drifts either side of where it was left
+const SWAY_PERIOD = 44000; // milliseconds
+
+// Two paths start this far apart: under a quarter of a pixel at the size the figure is drawn.
+const OFFSET = 0.05;
+const TAIL = 150; // steps of each path kept on screen
+const STEPS_PER_MS = 0.07;
+const PARTED = 1.5; // the distance at which the two paths can be told apart
+const APART = 12; // the distance at which they are on unrelated courses
+const LINGER = 700; // steps both paths are followed once they are apart
+const FADE = 700; // milliseconds
+
+type Point = [number, number, number];
+
+/** Returns a function that writes a point's canvas position and distance from the viewer into `out`. */
+function createProjection(yaw: number, tilt: number, scale = 1, originX = 0, originY = 0) {
+  const cosYaw = Math.cos(yaw);
+  const sinYaw = Math.sin(yaw);
+  const cosTilt = Math.cos(tilt);
+  const sinTilt = Math.sin(tilt);
+
+  return (x: number, y: number, z: number, out: number[]) => {
+    const across = x * cosYaw - y * sinYaw;
+    const depth = x * sinYaw + y * cosYaw;
+    const away = depth * cosTilt + z * sinTilt;
+    const perspective = 180 / (180 + away);
+    out[0] = originX + across * perspective * scale;
+    out[1] = originY - (z * cosTilt - depth * sinTilt) * perspective * scale;
+    out[2] = away;
+  };
+}
+
+// The space the curve needs across the whole sway, so it never drifts out of the stage.
+const frame = (() => {
+  const spot = [0, 0, 0];
+  let left = Infinity;
+  let right = -Infinity;
+  let top = Infinity;
+  let bottom = -Infinity;
+  for (const yaw of [initialView.yaw - SWAY, initialView.yaw, initialView.yaw + SWAY]) {
+    const place = createProjection(yaw, initialView.tilt);
+    for (let index = 0; index < count; index++) {
+      place(points[index * 3], points[index * 3 + 1], points[index * 3 + 2], spot);
+      left = Math.min(left, spot[0]);
+      right = Math.max(right, spot[0]);
+      top = Math.min(top, spot[1]);
+      bottom = Math.max(bottom, spot[1]);
+    }
+  }
+  const margin = 1.1; // the two paths occasionally swing wider than the drawn curve
+  return {
+    width: (right - left) * margin,
+    height: (bottom - top) * margin,
+    centreX: (left + right) / 2,
+    centreY: (top + bottom) / 2,
+  };
+})();
+
+function fit(width: number, height: number, yaw: number, tilt: number) {
+  const scale = Math.min(width / frame.width, height / frame.height);
+  return createProjection(yaw, tilt, scale, width / 2 - frame.centreX * scale, height / 2 - frame.centreY * scale);
 }
 
 // A server-rendered drawing stays visible before the canvas starts, or without JavaScript.
-const preview = Array.from({ length: 2 }, (_, lobe) => {
+const preview = (() => {
+  const place = fit(frame.width, frame.height, initialView.yaw, initialView.tilt);
+  const spot = [0, 0, 0];
   let path = "";
-  let connected = false;
   for (let index = 0; index < count; index += 3) {
-    if ((points[index * 3] >= 0 ? 1 : 0) !== lobe) { connected = false; continue; }
-    const [x, y] = project(index, 400, 300, initialView.yaw, initialView.tilt);
-    path += `${connected ? "L" : "M"}${x.toFixed(1)},${y.toFixed(1)}`;
-    connected = true;
+    place(points[index * 3], points[index * 3 + 1], points[index * 3 + 2], spot);
+    path += `${index ? "L" : "M"}${spot[0].toFixed(1)},${spot[1].toFixed(1)}`;
   }
   return path;
-});
+})();
+
+function distance(a: Point, b: Point) {
+  return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+}
+
+function pointAt(index: number): Point {
+  return [points[index * 3], points[index * 3 + 1], points[index * 3 + 2] + LORENZ_CENTRE];
+}
+
+/** Places on the curve from which the two paths can be told apart after three to five seconds. */
+function findStarts() {
+  const starts: number[] = [];
+  for (let index = 0; index < count && starts.length < 8; index += 61) {
+    let a = pointAt(index);
+    let b: Point = [a[0] + OFFSET, a[1], a[2]];
+    for (let step = 1; step <= 340; step++) {
+      a = stepLorenz(a);
+      b = stepLorenz(b);
+      if (distance(a, b) > PARTED) {
+        if (step >= 210) starts.push(index);
+        break;
+      }
+    }
+  }
+  return starts.length ? starts : [0];
+}
 
 export function AttractorCover() {
   const figureRef = useRef<HTMLElement>(null);
@@ -47,68 +124,140 @@ export function AttractorCover() {
     if (!canvas || !context || !figure) return;
 
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const starts = findStarts();
+    const tails = [new Float32Array(TAIL * 3), new Float32Array(TAIL * 3)];
+    const spot = [0, 0, 0];
+    let paths: [Point, Point] = [[0, 0, 0], [0, 0, 0]];
+    let run = 0;
+    let recorded = 0;
+    let pending = 0;
+    let lingering = -1;
+    let fading = 0;
     let width = 0;
     let height = 0;
     let yaw = initialView.yaw;
     let tilt = initialView.tilt;
-    let head = 1800;
-    let frame = 0;
+    let swayTime = 0;
+    let frameRequest = 0;
     let previousTime = 0;
     let visible = true;
-    let colourA = "";
-    let colourB = "";
-    let headColour = "";
+    let curveColour = "";
+    let paperColour = "";
+    let pathColours = ["", ""];
     let dragging: { id: number; x: number; y: number } | undefined;
 
+    function record() {
+      const slot = (recorded % TAIL) * 3;
+      paths.forEach((path, index) => {
+        tails[index][slot] = path[0];
+        tails[index][slot + 1] = path[1];
+        tails[index][slot + 2] = path[2] - LORENZ_CENTRE;
+      });
+      recorded++;
+    }
+
+    function restart() {
+      const first = pointAt(starts[run++ % starts.length]);
+      paths = [first, [first[0] + OFFSET, first[1], first[2]]];
+      recorded = 0;
+      lingering = -1;
+      fading = 0;
+      record();
+    }
+
+    function advance() {
+      paths = [stepLorenz(paths[0]), stepLorenz(paths[1])];
+      record();
+      if (lingering < 0 && distance(paths[0], paths[1]) > APART) lingering = LINGER;
+      else if (lingering > 0) lingering--;
+    }
+
     function draw() {
+      const place = fit(width, height, yaw + SWAY * Math.sin(swayTime * 2 * Math.PI / SWAY_PERIOD), tilt);
       context!.clearRect(0, 0, width, height);
+      context!.lineJoin = "round";
+
+      // The attractor itself: nearer strands are drawn darker.
       context!.lineWidth = 0.7;
+      context!.strokeStyle = curveColour;
       for (let start = 0; start < count - 1; start += 36) {
         const finish = Math.min(start + 36, count - 1);
-        const midpoint = Math.floor((start + finish) / 2);
-        context!.strokeStyle = points[midpoint * 3] < 0 ? colourA : colourB;
-        context!.globalAlpha = 0.23 + 0.5 * start / count;
+        let away = 0;
         context!.beginPath();
         for (let index = start; index <= finish; index++) {
-          const [x, y] = project(index, width, height, yaw, tilt);
-          if (index === start) context!.moveTo(x, y);
-          else context!.lineTo(x, y);
+          place(points[index * 3], points[index * 3 + 1], points[index * 3 + 2], spot);
+          if (index === start) context!.moveTo(spot[0], spot[1]);
+          else context!.lineTo(spot[0], spot[1]);
+          away += spot[2];
         }
+        const nearness = Math.max(0, Math.min(1, 0.5 - away / (finish - start + 1) / 56));
+        context!.globalAlpha = 0.16 + 0.44 * nearness;
         context!.stroke();
       }
 
+      // The two paths, each trailing where it has just been.
+      const length = Math.min(recorded, TAIL);
+      const oldest = recorded - length;
+      const strength = 1 - fading / FADE;
+      tails.forEach((tail, path) => {
+        context!.strokeStyle = pathColours[path];
+        context!.lineWidth = 1.6;
+        for (let start = 0; start < length - 1; start += 10) {
+          const finish = Math.min(start + 10, length - 1);
+          const freshness = 1 - (length - 1 - finish) / TAIL;
+          context!.globalAlpha = strength * (0.06 + 0.94 * freshness ** 1.4);
+          context!.beginPath();
+          for (let index = start; index <= finish; index++) {
+            const slot = ((oldest + index) % TAIL) * 3;
+            place(tail[slot], tail[slot + 1], tail[slot + 2], spot);
+            if (index === start) context!.moveTo(spot[0], spot[1]);
+            else context!.lineTo(spot[0], spot[1]);
+          }
+          context!.stroke();
+        }
+      });
+      tails.forEach((tail, path) => {
+        const slot = ((recorded - 1) % TAIL) * 3;
+        place(tail[slot], tail[slot + 1], tail[slot + 2], spot);
+        context!.globalAlpha = strength;
+        context!.fillStyle = pathColours[path];
+        context!.strokeStyle = paperColour;
+        context!.lineWidth = 1.5;
+        context!.beginPath();
+        context!.arc(spot[0], spot[1], 3.2, 0, Math.PI * 2);
+        context!.fill();
+        context!.stroke();
+      });
       context!.globalAlpha = 1;
-      const [x, y] = project(Math.floor(head) % count, width, height, yaw, tilt);
-      context!.fillStyle = headColour;
-      context!.beginPath();
-      context!.arc(x, y, 2, 0, Math.PI * 2);
-      context!.fill();
     }
 
     function animate(time: number) {
-      if (time - previousTime >= 32) {
-        const elapsed = previousTime ? Math.min(time - previousTime, 64) : 0;
-        if (!dragging) yaw += elapsed * 0.000022;
-        head = (head + elapsed * 0.045) % count;
-        draw();
-        previousTime = time;
+      const elapsed = previousTime ? Math.min(time - previousTime, 64) : 0;
+      previousTime = time;
+      if (!dragging) swayTime += elapsed;
+      pending += elapsed * STEPS_PER_MS;
+      for (; pending >= 1; pending--) advance();
+      if (lingering === 0) {
+        fading += elapsed;
+        if (fading >= FADE) restart();
       }
-      frame = window.requestAnimationFrame(animate);
+      draw();
+      frameRequest = window.requestAnimationFrame(animate);
     }
 
     function syncAnimation() {
-      window.cancelAnimationFrame(frame);
+      window.cancelAnimationFrame(frameRequest);
       if (playingRef.current && visible && !document.hidden) {
         previousTime = 0;
-        frame = window.requestAnimationFrame(animate);
+        frameRequest = window.requestAnimationFrame(animate);
       } else draw();
     }
 
     function resize() {
       const colours = getComputedStyle(figure!);
-      colourA = colours.getPropertyValue("--plot-a").trim();
-      colourB = colours.getPropertyValue("--plot-b").trim();
-      headColour = colours.getPropertyValue("--ink").trim();
+      curveColour = colours.getPropertyValue("--muted").trim();
+      paperColour = colours.getPropertyValue("--paper").trim();
+      pathColours = [colours.getPropertyValue("--plot-a").trim(), colours.getPropertyValue("--plot-b").trim()];
       const bounds = canvas!.getBoundingClientRect();
       width = bounds.width;
       height = bounds.height;
@@ -145,12 +294,19 @@ export function AttractorCover() {
       if (event.key === "ArrowRight") yaw += 0.1;
       if (event.key === "ArrowUp") tilt = Math.min(0.9, tilt + 0.1);
       if (event.key === "ArrowDown") tilt = Math.max(-0.9, tilt - 0.1);
-      if (event.key === "Home") { yaw = initialView.yaw; tilt = initialView.tilt; }
+      if (event.key === "Home") { yaw = initialView.yaw; tilt = initialView.tilt; swayTime = 0; }
       draw();
     }
     function onMotionChange() {
       if (motion.matches) { playingRef.current = false; setPlaying(false); }
       syncAnimation();
+    }
+
+    restart();
+    // Without motion the figure shows the outcome instead: the two paths on separate wings.
+    if (motion.matches) {
+      const settled = () => lingering > 0 && lingering <= LINGER - TAIL && paths[0][0] * paths[1][0] < -25;
+      for (let step = 0; step < 4000 && !settled(); step++) advance();
     }
 
     const sizes = new ResizeObserver(resize);
@@ -177,7 +333,7 @@ export function AttractorCover() {
     syncRef.current = syncAnimation;
 
     return () => {
-      window.cancelAnimationFrame(frame);
+      window.cancelAnimationFrame(frameRequest);
       sizes.disconnect();
       themes.disconnect();
       visibility.disconnect();
@@ -196,20 +352,24 @@ export function AttractorCover() {
   return (
     <figure className={styles.figure} ref={figureRef}>
       <div className={styles.stage}>
-        <span className={styles.parameters} aria-hidden="true">σ 10 · ρ 28 · β 8/3</span>
-        <svg className={styles.preview} viewBox="0 0 400 300" aria-hidden="true">
-          {preview.map((path, index) => <path key={index} d={path} stroke={index === 0 ? "var(--plot-a)" : "var(--plot-b)"} />)}
+        <svg
+          className={styles.preview}
+          viewBox={`0 0 ${frame.width.toFixed(1)} ${frame.height.toFixed(1)}`}
+          aria-hidden="true"
+        >
+          <path d={preview} />
         </svg>
         <canvas
           ref={canvasRef}
           tabIndex={0}
           role="img"
-          aria-label="Lorenz attractor. Drag or use the arrow keys to rotate. Press Home to reset the view."
+          aria-label="Lorenz attractor, with two paths that start almost together and end up on separate courses. Drag or use the arrow keys to rotate. Press Home to reset the view."
         />
+        <span className={styles.parameters} aria-hidden="true">σ 10 · ρ 28 · β 8/3</span>
         <span className={styles.dragHint} aria-hidden="true">Drag to rotate</span>
       </div>
       <figcaption>
-        <span>Lorenz attractor</span>
+        <p><span>Lorenz attractor.</span> Two paths that start less than a pixel apart.</p>
         <button
           type="button"
           aria-label={playing ? "Pause attractor animation" : "Play attractor animation"}
